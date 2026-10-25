@@ -272,6 +272,7 @@
   "Tadoba Buffer|2026-10-29|Somnath (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-10-29|Zari Peth (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-10-29|Zari Peth (Buffer)|Morning": 5,
+  "Tadoba Buffer|2026-10-30|Junona(Buffer)|Afternoon": 1,
   "Tadoba Buffer|2026-10-30|Navegaon Ramdegi(Buffer)|Afternoon": 1,
   "Tadoba Buffer|2026-10-30|Navegaon Ramdegi(Buffer)|Morning": 5,
   "Tadoba Buffer|2026-10-30|Nimdhela (Buffer)|Afternoon": 2,
@@ -288,6 +289,7 @@
   "Tadoba Buffer|2026-10-31|Pangadi Aswal Chuha (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-10-31|Somnath (Buffer)|Afternoon": 4,
   "Tadoba Buffer|2026-10-31|Somnath (Buffer)|Morning": 1,
+  "Tadoba Buffer|2026-11-01|Agarzari (Buffer)|Afternoon": 1,
   "Tadoba Buffer|2026-11-01|Navegaon Ramdegi(Buffer)|Afternoon": 2,
   "Tadoba Buffer|2026-11-01|Nimdhela (Buffer)|Afternoon": 4,
   "Tadoba Buffer|2026-11-01|Nimdhela (Buffer)|Morning": 3,
@@ -443,7 +445,7 @@
   "Tadoba Buffer|2026-11-19|Palasgaon (Buffer)|Morning": 6,
   "Tadoba Buffer|2026-11-19|Pangadi Aswal Chuha (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-11-19|Pangadi Aswal Chuha (Buffer)|Morning": 6,
-  "Tadoba Buffer|2026-11-19|Shirkheda (Buffer)|Afternoon": 2,
+  "Tadoba Buffer|2026-11-19|Shirkheda (Buffer)|Afternoon": 1,
   "Tadoba Buffer|2026-11-19|Shirkheda (Buffer)|Morning": 4,
   "Tadoba Buffer|2026-11-19|Somnath (Buffer)|Afternoon": 3,
   "Tadoba Buffer|2026-11-19|Somnath (Buffer)|Morning": 6,
@@ -510,8 +512,7 @@
   "Tadoba Buffer|2026-11-24|Somnath (Buffer)|Afternoon": 2,
   "Tadoba Buffer|2026-11-24|Somnath (Buffer)|Morning": 1,
   "Tadoba Buffer|2026-11-24|Zari Peth (Buffer)|Afternoon": 1,
-  "Tadoba Buffer|2026-11-24|Zari Peth (Buffer)|Morning": 6,
-  "Tadoba Core|2026-11-04|Khutwanda Gate (Core)|Afternoon": 1
+  "Tadoba Buffer|2026-11-24|Zari Peth (Buffer)|Morning": 6
  },
  "telegram": {
   "Pench MP|2026-10-27|Jhamtara|Evening": 3,
@@ -786,6 +787,7 @@
   "Tadoba Buffer|2026-10-29|Somnath (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-10-29|Zari Peth (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-10-29|Zari Peth (Buffer)|Morning": 5,
+  "Tadoba Buffer|2026-10-30|Junona(Buffer)|Afternoon": 1,
   "Tadoba Buffer|2026-10-30|Navegaon Ramdegi(Buffer)|Afternoon": 1,
   "Tadoba Buffer|2026-10-30|Navegaon Ramdegi(Buffer)|Morning": 5,
   "Tadoba Buffer|2026-10-30|Nimdhela (Buffer)|Afternoon": 2,
@@ -802,6 +804,7 @@
   "Tadoba Buffer|2026-10-31|Pangadi Aswal Chuha (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-10-31|Somnath (Buffer)|Afternoon": 4,
   "Tadoba Buffer|2026-10-31|Somnath (Buffer)|Morning": 1,
+  "Tadoba Buffer|2026-11-01|Agarzari (Buffer)|Afternoon": 1,
   "Tadoba Buffer|2026-11-01|Navegaon Ramdegi(Buffer)|Afternoon": 2,
   "Tadoba Buffer|2026-11-01|Nimdhela (Buffer)|Afternoon": 4,
   "Tadoba Buffer|2026-11-01|Nimdhela (Buffer)|Morning": 3,
@@ -957,7 +960,7 @@
   "Tadoba Buffer|2026-11-19|Palasgaon (Buffer)|Morning": 6,
   "Tadoba Buffer|2026-11-19|Pangadi Aswal Chuha (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-11-19|Pangadi Aswal Chuha (Buffer)|Morning": 6,
-  "Tadoba Buffer|2026-11-19|Shirkheda (Buffer)|Afternoon": 2,
+  "Tadoba Buffer|2026-11-19|Shirkheda (Buffer)|Afternoon": 1,
   "Tadoba Buffer|2026-11-19|Shirkheda (Buffer)|Morning": 4,
   "Tadoba Buffer|2026-11-19|Somnath (Buffer)|Afternoon": 3,
   "Tadoba Buffer|2026-11-19|Somnath (Buffer)|Morning": 6,
@@ -1024,7 +1027,6 @@
   "Tadoba Buffer|2026-11-24|Somnath (Buffer)|Afternoon": 2,
   "Tadoba Buffer|2026-11-24|Somnath (Buffer)|Morning": 1,
   "Tadoba Buffer|2026-11-24|Zari Peth (Buffer)|Afternoon": 1,
-  "Tadoba Buffer|2026-11-24|Zari Peth (Buffer)|Morning": 6,
-  "Tadoba Core|2026-11-04|Khutwanda Gate (Core)|Afternoon": 1
+  "Tadoba Buffer|2026-11-24|Zari Peth (Buffer)|Morning": 6
  }
 }
