@@ -1,0 +1,4 @@
+__pycache__/
+.env
+mh-proxy/.vercel
+mh-proxy/.env*

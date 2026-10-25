@@ -1,0 +1,35 @@
+name: safari-watch
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: safari-watch
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python test_check.py && python check.py
+        env:
+          DAYS_AHEAD: ${{ vars.DAYS_AHEAD || '30' }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          WA_PHONE: ${{ secrets.WA_PHONE }}
+          WA_APIKEY: ${{ secrets.WA_APIKEY }}
+          MH_PROXY_URL: ${{ secrets.MH_PROXY_URL }}
+          MH_PROXY_TOKEN: ${{ secrets.MH_PROXY_TOKEN }}
+      - name: Save state
+        if: always()
+        run: |
+          git config user.name "safari-bot"
+          git config user.email "safari-bot@users.noreply.github.com"
+          git add state.json 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "update state" && git push)
