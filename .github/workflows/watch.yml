@@ -22,6 +22,8 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           WA_PHONE: ${{ secrets.WA_PHONE }}
           WA_APIKEY: ${{ secrets.WA_APIKEY }}
           MH_PROXY_URL: ${{ secrets.MH_PROXY_URL }}

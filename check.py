@@ -133,6 +133,23 @@ def send_whatsapp(text):
     return True
 
 
+def send_telegram(text):
+    token, chat = os.environ.get("TG_BOT_TOKEN"), os.environ.get("TG_CHAT_ID")
+    if not (token and chat):
+        return print("telegram not configured, skipping")
+    chunks, cur = [], ""
+    for line in text.split("\n"):  # Telegram caps messages at 4096 chars; split on line boundaries
+        if len(cur) + len(line) > 3800:
+            chunks.append(cur)
+            cur = ""
+        cur += line + "\n"
+    for c in chunks + [cur]:
+        body = urllib.parse.urlencode({"chat_id": chat, "text": c, "parse_mode": "HTML",
+                                       "disable_web_page_preview": "true"}).encode()
+        urllib.request.urlopen(f"https://api.telegram.org/bot{token}/sendMessage", body, timeout=60).read()
+    return True
+
+
 def format_alert(new):
     lines = ["New safari slots available:"]
     for k in sorted(new, key=lambda k: (k.split("|")[1], k)):
@@ -220,6 +237,28 @@ def whatsapp_alert(new, first):
                          + ". Full list in your email.")
 
 
+def telegram_alert(new, first):
+    e = html.escape
+    n = len(new)
+    title = f"All open safari slots ({n})" if first else f"{n} new safari slot{'s' * (n != 1)} open"
+    rows = {}
+    for k, seats in new.items():
+        park, d, gate, shift = k.split("|")
+        rows.setdefault(park, {}).setdefault(d, {}).setdefault(gate, []).append(f"{shift} {seats}")
+    lines = [f"<b>{e(title)}</b>"]
+    for park in sorted(rows):
+        link = MP_URL if park.startswith("Pench MP") else f"{MH_BASE}/Userlogin/index/"
+        lines += ["", f'<b>{e(park)}</b>  <a href="{link}">Book</a>']
+        for d in sorted(rows[park]):
+            day = dt.date.fromisoformat(d).strftime("%a %d %b")
+            if n > 30:  # big batch: one line per date instead of every gate
+                lines.append(f"{day}: {sum(len(v) for v in rows[park][d].values())} slots")
+            else:
+                for gate, shifts in sorted(rows[park][d].items()):
+                    lines.append(f"{day} · {e(gate)}: {', '.join(sorted(shifts, key=lambda x: x[0] != 'M'))}")
+    return send_telegram("\n".join(lines))
+
+
 def main(dry_run=False):
     today = dt.date.today()
     dates = [today + dt.timedelta(days=i) for i in range(1, DAYS_AHEAD + 1, 5)]
@@ -241,7 +280,7 @@ def main(dry_run=False):
         print(format_alert(scraped))
         return
     sent_ok = True
-    for channel, send in (("email", email_alert), ("whatsapp", whatsapp_alert)):
+    for channel, send in (("email", email_alert), ("telegram", telegram_alert), ("whatsapp", whatsapp_alert)):
         old = state.get(channel, {})
         # a park that failed to scrape keeps this channel's last view, so it doesn't re-alert on recovery
         now = {**{k: v for k, v in old.items() if k.split("|")[0] in failed}, **scraped}

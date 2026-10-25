@@ -38,7 +38,8 @@ def fake_email(new, first):
     return True
 
 
-check.email_alert, check.whatsapp_alert = fake_email, lambda new, first: None  # whatsapp unconfigured
+check.email_alert = fake_email
+check.telegram_alert = check.whatsapp_alert = lambda new, first: None  # unconfigured
 
 
 def run():
