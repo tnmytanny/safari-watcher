@@ -202,7 +202,6 @@ def main(dry_run=False):
     today = dt.date.today()
     dates = [today + dt.timedelta(days=i) for i in range(1, DAYS_AHEAD + 1, 5)]
     old = json.load(open(STATE_FILE)) if os.path.exists(STATE_FILE) else {}
-    seen_parks = {k.split("|")[0] for k in old}
     jobs = [("Pench MP", lambda: mp_slots(dates))] + [
         (label, lambda p=p, v=v, l=label: mh_slots(l, p, v, dates)) for label, p, v in MH_PARKS]
     cutoff = (today + dt.timedelta(days=DAYS_AHEAD)).isoformat()
@@ -217,13 +216,9 @@ def main(dry_run=False):
             failed.append(label)
             # keep previous state for failed park so its slots don't re-alert on recovery
             now.update({k: v for k, v in old.items() if k.startswith(label + "|")})
-    # a park's first successful run only seeds state, else every open slot alerts at once
-    seeded = {k.split("|")[0] for k in now} - seen_parks
-    if seeded:
-        print(f"seeded without alert: {sorted(seeded)}")
-    # new = freed-up slot or newly added date/slot (anything not open last run)
-    new = {k: v for k, v in now.items()
-           if k not in old and k.split("|")[0] not in seeded and k.split("|")[1] > today.isoformat()}
+    # new = freed-up slot or newly added date/slot (anything not open last run).
+    # With no state yet (first run / reset), that is every open slot: sent as a full snapshot.
+    new = {k: v for k, v in now.items() if k not in old and k.split("|")[1] > today.isoformat()}
     if dry_run:
         print(format_alert(now))
         return
@@ -231,8 +226,12 @@ def main(dry_run=False):
         text = format_alert(new)
         print(text)
         n = len(new)
-        heading = f"{n} new safari slot{'s' * (n != 1)} open"
-        send_email(text, format_html(new, heading, "Booked slots that freed up or newly added dates."), heading)
+        if old:
+            heading, note = f"{n} new safari slot{'s' * (n != 1)} open", "Booked slots that freed up or newly added dates."
+        else:
+            heading = f"All open safari slots ({n})"
+            note = f"Full snapshot for the next {DAYS_AHEAD} days. From now on you'll only get newly opened slots."
+        send_email(text, format_html(new, heading, note), heading)
         send_whatsapp(text)
     else:
         print("no new slots")
