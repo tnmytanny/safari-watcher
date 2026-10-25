@@ -17,3 +17,41 @@ MH = """<table class='table table-stripped table-bordered'><tbody> <tr>
 assert parse_mp(MP) == {"Pench MP|2026-11-14|Khawasa|Evening": 12}, parse_mp(MP)
 assert parse_mh("Tadoba Buffer", MH) == {"Tadoba Buffer|2026-11-15|Agarzari (Buffer)|Afternoon": 2}, parse_mh("Tadoba Buffer", MH)
 print("ok")
+
+# delivery: state advances only after a successful send; failures retry next run
+import datetime, os, tempfile
+import check
+
+D = (datetime.date.today() + datetime.timedelta(days=3)).isoformat()
+
+check.STATE_FILE = os.path.join(tempfile.mkdtemp(), "state.json")
+portal = {f"Pench MP|{D}|Khawasa|Morning": 5}
+check.mp_slots = lambda dates: dict(portal)
+check.mh_slots = lambda *a: {}
+sent, fail = [], [False]
+
+
+def fake_email(new, first):
+    if fail[0]:
+        raise OSError("smtp down")
+    sent.append((sorted(new), first))
+    return True
+
+
+check.email_alert, check.whatsapp_alert = fake_email, lambda new, first: None  # whatsapp unconfigured
+
+
+def run():
+    try:
+        check.main()
+    except SystemExit:
+        pass
+
+
+fail[0] = True; run()                       # send fails -> nothing marked delivered
+fail[0] = False; run()                      # retried, sent as first snapshot
+assert sent == [([f"Pench MP|{D}|Khawasa|Morning"], True)], sent
+run(); assert len(sent) == 1                # no change -> no mail
+portal[f"Pench MP|{D}|Khawasa|Evening"] = 3; run()  # freed slot -> only it
+assert sent[-1] == ([f"Pench MP|{D}|Khawasa|Evening"], False), sent
+print("delivery ok")

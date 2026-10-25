@@ -110,15 +110,16 @@ def mh_slots(label, park, vehicle, dates):
 def send_email(text, html_body=None, subject="Safari slots open"):
     user, pw, to = (os.environ.get(k) for k in ("GMAIL_USER", "GMAIL_APP_PASSWORD", "ALERT_EMAIL"))
     if not (user and pw and to):
-        return print("email not configured, skipping")
+        return print("email not configured, skipping")  # None: not configured, state untouched
     msg = EmailMessage()
     msg["Subject"], msg["From"], msg["To"] = subject, user, to
     msg.set_content(text)
     if html_body:
         msg.add_alternative(html_body, subtype="html")
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as s:
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=60) as s:
         s.login(user, pw)
         s.send_message(msg)
+    return True
 
 
 def send_whatsapp(text):
@@ -129,6 +130,7 @@ def send_whatsapp(text):
         q = urllib.parse.urlencode({"phone": phone, "text": text[i:i + 1500], "apikey": key})
         urllib.request.urlopen(f"https://api.callmebot.com/whatsapp.php?{q}", timeout=60).read()
         time.sleep(3)
+    return True
 
 
 def format_alert(new):
@@ -198,46 +200,66 @@ def format_html(slots, heading, note=""):
 </table></td></tr></table></body></html>'''
 
 
+def email_alert(new, first):
+    n = len(new)
+    if first:
+        heading = f"All open safari slots ({n})"
+        note = f"Full snapshot for the next {DAYS_AHEAD} days. From now on you'll only get newly opened slots."
+    else:
+        heading, note = f"{n} new safari slot{'s' * (n != 1)} open", "Booked slots that freed up or newly added dates."
+    return send_email(format_alert(new), format_html(new, heading, note), heading)
+
+
+def whatsapp_alert(new, first):
+    if len(new) <= 30:
+        return send_whatsapp(format_alert(new))
+    counts = {}  # big batches (e.g. first run) as a per-park summary instead of dozens of messages
+    for k in new:
+        counts[k.split("|")[0]] = counts.get(k.split("|")[0], 0) + 1
+    return send_whatsapp(f"{len(new)} safari slots open: " + ", ".join(f"{p} {n}" for p, n in sorted(counts.items()))
+                         + ". Full list in your email.")
+
+
 def main(dry_run=False):
     today = dt.date.today()
     dates = [today + dt.timedelta(days=i) for i in range(1, DAYS_AHEAD + 1, 5)]
-    old = json.load(open(STATE_FILE)) if os.path.exists(STATE_FILE) else {}
+    # per channel: slots that channel has successfully delivered, {"email": {key: seats}, "whatsapp": {...}}
+    state = json.load(open(STATE_FILE)) if os.path.exists(STATE_FILE) else {}
     jobs = [("Pench MP", lambda: mp_slots(dates))] + [
         (label, lambda p=p, v=v, l=label: mh_slots(l, p, v, dates)) for label, p, v in MH_PARKS]
     cutoff = (today + dt.timedelta(days=DAYS_AHEAD)).isoformat()
-    now, failed = {}, []
+    scraped, failed = {}, set()
     for label, job in jobs:
         try:
-            got = {k: v for k, v in job().items() if k.split("|")[1] <= cutoff}
+            got = {k: v for k, v in job().items() if today.isoformat() < k.split("|")[1] <= cutoff}
             print(f"{label}: {len(got)} available slots")
-            now.update(got)
+            scraped.update(got)
         except Exception as e:
             print(f"{label}: FAILED {e!r}")
-            failed.append(label)
-            # keep previous state for failed park so its slots don't re-alert on recovery
-            now.update({k: v for k, v in old.items() if k.startswith(label + "|")})
-    # new = freed-up slot or newly added date/slot (anything not open last run).
-    # With no state yet (first run / reset), that is every open slot: sent as a full snapshot.
-    new = {k: v for k, v in now.items() if k not in old and k.split("|")[1] > today.isoformat()}
+            failed.add(label)
     if dry_run:
-        print(format_alert(now))
+        print(format_alert(scraped))
         return
-    if new:
-        text = format_alert(new)
-        print(text)
-        n = len(new)
-        if old:
-            heading, note = f"{n} new safari slot{'s' * (n != 1)} open", "Booked slots that freed up or newly added dates."
-        else:
-            heading = f"All open safari slots ({n})"
-            note = f"Full snapshot for the next {DAYS_AHEAD} days. From now on you'll only get newly opened slots."
-        send_email(text, format_html(new, heading, note), heading)
-        send_whatsapp(text)
-    else:
-        print("no new slots")
-    json.dump(now, open(STATE_FILE, "w"), indent=1, sort_keys=True)
-    if len(failed) == len(jobs):
-        sys.exit("all portals failed")
+    sent_ok = True
+    for channel, send in (("email", email_alert), ("whatsapp", whatsapp_alert)):
+        old = state.get(channel, {})
+        # a park that failed to scrape keeps this channel's last view, so it doesn't re-alert on recovery
+        now = {**{k: v for k, v in old.items() if k.split("|")[0] in failed}, **scraped}
+        # new = freed-up slot or newly added date/slot; with no state yet that's every open slot
+        new = {k: v for k, v in now.items() if k not in old}
+        if not new:
+            state[channel] = now
+            continue
+        try:
+            if send(new, first=not old):
+                state[channel] = now  # only mark delivered after a successful send
+                print(f"{channel}: sent {len(new)} new slots")
+        except Exception as e:
+            sent_ok = False
+            print(f"{channel}: SEND FAILED {e!r}, will retry next run")
+    json.dump(state, open(STATE_FILE, "w"), indent=1, sort_keys=True)
+    if not sent_ok or len(failed) == len(jobs):
+        sys.exit("send failed" if not sent_ok else "all portals failed")
 
 
 if __name__ == "__main__":
