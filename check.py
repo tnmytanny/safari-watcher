@@ -107,13 +107,15 @@ def mh_slots(label, park, vehicle, dates):
     return out
 
 
-def send_email(text):
+def send_email(text, html_body=None, subject="Safari slots open"):
     user, pw, to = (os.environ.get(k) for k in ("GMAIL_USER", "GMAIL_APP_PASSWORD", "ALERT_EMAIL"))
     if not (user and pw and to):
         return print("email not configured, skipping")
     msg = EmailMessage()
-    msg["Subject"], msg["From"], msg["To"] = "Safari slots open!", user, to
+    msg["Subject"], msg["From"], msg["To"] = subject, user, to
     msg.set_content(text)
+    if html_body:
+        msg.add_alternative(html_body, subtype="html")
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as s:
         s.login(user, pw)
         s.send_message(msg)
@@ -136,6 +138,64 @@ def format_alert(new):
         lines.append(f"- {park} | {d} | {gate} | {shift} | {new[k]} seats")
     lines += ["", f"MP: {MP_URL}", f"MH: {MH_BASE}/Userlogin/index/"]
     return "\n".join(lines)
+
+
+def format_html(slots, heading, note=""):
+    """One card per park; a row per date+gate with a seats column per shift. Inline styles for email clients."""
+    e = html.escape
+    parks = {}
+    for k, seats in slots.items():
+        park, d, gate, shift = k.split("|")
+        parks.setdefault(park, {}).setdefault((d, gate), {})[shift] = seats
+    td = "padding:9px 12px;border-bottom:1px solid #eef0ee;font-size:14px;"
+    cards = []
+    for park in sorted(parks):
+        rows = parks[park]
+        shifts = [s for s in ("Morning", "Afternoon", "Evening") if any(s in r for r in rows.values())]
+        link = MP_URL if park.startswith("Pench MP") else f"{MH_BASE}/Userlogin/index/"
+        head = "".join(f'<th style="{td}text-align:center;color:#6b7280;font-weight:600;font-size:12px;'
+                       f'text-transform:uppercase;letter-spacing:.04em">{s}</th>' for s in shifts)
+        body, last = [], None
+        for d, gate in sorted(rows):
+            day = dt.date.fromisoformat(d).strftime("%a, %d %b")
+            label = f'<b style="color:#111827">{day}</b>' if d != last else ""
+            last = d
+            cells = "".join(
+                f'<td style="{td}text-align:center">'
+                + (f'<span style="background:#e7f6ec;color:#166534;border-radius:12px;padding:3px 10px;'
+                   f'font-weight:600">{rows[(d, gate)][s]}</span>' if s in rows[(d, gate)]
+                   else '<span style="color:#d1d5db">&ndash;</span>')
+                + "</td>" for s in shifts)
+            body.append(f'<tr><td style="{td}white-space:nowrap">{label}</td>'
+                        f'<td style="{td}color:#374151">{e(gate)}</td>{cells}</tr>')
+        n = sum(len(r) for r in rows.values())
+        cards.append(f'''
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;margin:0 0 20px;border:1px solid #e5e7eb">
+ <tr><td style="padding:18px 20px 6px">
+  <table width="100%" cellpadding="0" cellspacing="0"><tr>
+   <td style="font-size:18px;font-weight:700;color:#14532d">{e(park)}</td>
+   <td align="right"><a href="{link}" style="background:#15803d;color:#fff;text-decoration:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600">Book now</a></td>
+  </tr></table>
+  <div style="color:#6b7280;font-size:13px;margin-top:2px">{n} slot{"s" * (n != 1)} &middot; seats left per shift</div>
+ </td></tr>
+ <tr><td style="padding:6px 8px 12px">
+  <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">
+   <tr><th style="{td}text-align:left;color:#6b7280;font-size:12px;text-transform:uppercase">Date</th>
+       <th style="{td}text-align:left;color:#6b7280;font-size:12px;text-transform:uppercase">Gate</th>{head}</tr>
+   {"".join(body)}
+  </table>
+ </td></tr>
+</table>''')
+    return f'''<!doctype html><html><body style="margin:0;background:#f4f6f4;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:24px 12px">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:640px">
+ <tr><td style="padding:0 4px 18px">
+  <div style="font-size:22px;font-weight:700;color:#111827">{e(heading)}</div>
+  {f'<div style="color:#4b5563;font-size:14px;margin-top:6px">{e(note)}</div>' if note else ""}
+ </td></tr>
+ <tr><td>{"".join(cards)}</td></tr>
+ <tr><td style="color:#9ca3af;font-size:12px;padding:4px;text-align:center">Safari slot watcher &middot; checks every 5 minutes</td></tr>
+</table></td></tr></table></body></html>'''
 
 
 def main(dry_run=False):
@@ -170,7 +230,9 @@ def main(dry_run=False):
     if new:
         text = format_alert(new)
         print(text)
-        send_email(text)
+        n = len(new)
+        heading = f"{n} new safari slot{'s' * (n != 1)} open"
+        send_email(text, format_html(new, heading, "Booked slots that freed up or newly added dates."), heading)
         send_whatsapp(text)
     else:
         print("no new slots")
