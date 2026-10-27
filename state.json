@@ -1,7 +1,6 @@
 {
  "cells": {
   "Bandhavgarh Single|2026-10-29|Magadhi|Evening": 4,
-  "Bandhavgarh Single|2026-10-29|Magadhi|Morning": 2,
   "Bandhavgarh Single|2026-10-30|Khitauli|Evening": 1,
   "Bandhavgarh Single|2026-10-30|Magadhi|Evening": 1,
   "Bandhavgarh|2026-11-02|Magadhi|Evening": 3,
@@ -18,7 +17,7 @@
   "Kanha Single|2026-10-30|Kisli|Morning": 7,
   "Kanha Tatkal|2026-10-29|Kanha|Morning": 4,
   "Kanha Tatkal|2026-10-29|Kisli|Morning": 3,
-  "Kanha Tatkal|2026-11-03|Kisli|Evening": 3,
+  "Kanha Tatkal|2026-11-03|Kisli|Evening": 2,
   "Kanha|2026-10-29|Kanha|Evening": 10,
   "Kanha|2026-10-30|Kanha|Evening": 9,
   "Kanha|2026-11-02|Kanha|Evening": 8,
@@ -602,7 +601,6 @@
  },
  "email": {
   "Bandhavgarh Single|2026-10-29|Magadhi|Evening": 4,
-  "Bandhavgarh Single|2026-10-29|Magadhi|Morning": 2,
   "Bandhavgarh Single|2026-10-30|Khitauli|Evening": 1,
   "Bandhavgarh Single|2026-10-30|Magadhi|Evening": 1,
   "Bandhavgarh|2026-11-02|Magadhi|Evening": 3,
@@ -619,7 +617,7 @@
   "Kanha Single|2026-10-30|Kisli|Morning": 7,
   "Kanha Tatkal|2026-10-29|Kanha|Morning": 4,
   "Kanha Tatkal|2026-10-29|Kisli|Morning": 3,
-  "Kanha Tatkal|2026-11-03|Kisli|Evening": 3,
+  "Kanha Tatkal|2026-11-03|Kisli|Evening": 2,
   "Kanha|2026-10-29|Kanha|Evening": 10,
   "Kanha|2026-10-30|Kanha|Evening": 9,
   "Kanha|2026-11-02|Kanha|Evening": 8,
@@ -785,7 +783,6 @@
  },
  "telegram": {
   "Bandhavgarh Single|2026-10-29|Magadhi|Evening": 4,
-  "Bandhavgarh Single|2026-10-29|Magadhi|Morning": 2,
   "Bandhavgarh Single|2026-10-30|Khitauli|Evening": 1,
   "Bandhavgarh Single|2026-10-30|Magadhi|Evening": 1,
   "Bandhavgarh|2026-11-02|Magadhi|Evening": 3,
@@ -802,7 +799,7 @@
   "Kanha Single|2026-10-30|Kisli|Morning": 7,
   "Kanha Tatkal|2026-10-29|Kanha|Morning": 4,
   "Kanha Tatkal|2026-10-29|Kisli|Morning": 3,
-  "Kanha Tatkal|2026-11-03|Kisli|Evening": 3,
+  "Kanha Tatkal|2026-11-03|Kisli|Evening": 2,
   "Kanha|2026-10-29|Kanha|Evening": 10,
   "Kanha|2026-10-30|Kanha|Evening": 9,
   "Kanha|2026-11-02|Kanha|Evening": 8,
