@@ -11,7 +11,19 @@
   const RETRY_MS = 1500, WINDOW_MS = 90000; // ~60 refreshes max, one every 1.5 s
   let cfg = {}, offset = 0; // offset = portal clock - local clock (ms)
 
+  offset = Number(sessionStorage.getItem("spa-offset")) || 0; // last sync, so page-load marks use the portal clock
   const portalNow = () => Date.now() + offset;
+
+  // ---------- timing log: each step relative to the release time, kept for the last run ----------
+  let logChain = Promise.resolve(); // serialise read-modify-write of runLog
+  const mark = (label, at = portalNow()) => (logChain = logChain.then(() => writeMark(label, at)).catch(() => {}));
+  async function writeMark(label, at) {
+    if (!cfg.armId) return;
+    const { runLog = {} } = await chrome.storage.local.get("runLog");
+    const log = runLog.armId === cfg.armId ? runLog : { armId: cfg.armId, release: `${cfg.date} ${cfg.at}`, steps: [] };
+    log.steps.push(`${((at - releaseAt()) / 1000).toFixed(2)}s ${label}`);
+    await chrome.storage.local.set({ runLog: log });
+  }
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   // ---------- form record / replay ----------
@@ -65,6 +77,19 @@
     if (manual) { manual.scrollIntoView({ block: "center" }); manual.focus(); }
     return `${data ? "Filled" : "No saved form here; ticked"} ${n} field(s)${manual ? " — enter captcha/OTP" : ""}`;
   }
+
+  // Enter in the captcha/OTP box clicks the step's own button (the form's default would hit a row-reset image button)
+  const NEXT = [/book your permit/i, /verify/i, /log ?in|sign in/i, /submit|continue/i]; // first match wins
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" || !/captcha|otp/i.test(e.target.name + e.target.id)) return;
+    const btns = [...document.querySelectorAll("input[type=submit], input[type=button], button")]
+      .filter((b) => b.offsetParent && !/pay/i.test(b.value || b.textContent));
+    const btn = NEXT.map((re) => btns.find((b) => re.test(b.value || b.textContent))).find(Boolean);
+    if (!btn) return;
+    e.preventDefault();
+    mark(`enter -> ${(btn.value || btn.textContent).trim()}`);
+    btn.click();
+  }, true);
 
   // ---------- availability: find the best open gate ----------
   function candidates() {
@@ -135,16 +160,20 @@
 
   async function attempt() {
     const tag = `spa-${cfg.armId}`;
+    if (!sessionStorage.getItem(tag)) await mark("fire");
     if (sessionStorage.getItem(tag) === "done") return;
-    sessionStorage.removeItem("spa-picked"); // note from an earlier arm
+    if (!sessionStorage.getItem(tag)) sessionStorage.removeItem("spa-picked"); // note from an earlier arm
+    sessionStorage.setItem(tag, "running");
     while (cfg.armed && portalNow() - releaseAt() < WINDOW_MS) {
       const c = best();
       if (c) {
         sessionStorage.setItem(tag, "done");
         sessionStorage.setItem("spa-picked", `Opened ${c.gate} ${c.shift} ${c.date}`); // shown on the next page too
+        await mark(`pick ${c.gate} ${c.shift} ${c.date}`);
         c.el.click();
         return;
       }
+      mark("refresh");
       if (!(await refresh())) return banner("No search button on this page — open the availability page");
       if (MP) await sleep(RETRY_MS);
     }
@@ -158,11 +187,23 @@
   const banner = (t) => { note = t; };
 
   async function syncClock() {
-    try { // Date header has 1 s resolution; +500 ms centres the error
-      // site root, never the current page: re-requesting MP booking pages trips "Illegal Operation" and logs out
-      const r = await fetch(location.origin + "/", { method: "HEAD", cache: "no-store", credentials: "include" });
-      offset = Date.parse(r.headers.get("date")) + 500 - Date.now();
-    } catch { /* keep last offset */ }
+    // The Date header only has 1 s resolution. Each sample bounds the offset to
+    // [D - received, D + 1000 - sent]; intersecting 6 samples ~230 ms apart narrows it to ~0.2 s.
+    let lo = -Infinity, hi = Infinity;
+    for (let i = 0; i < 6; i++) {
+      try { // site root, never the current page: re-requesting MP booking pages trips "Illegal Operation" and logs out
+        const sent = Date.now();
+        const r = await fetch(location.origin + "/", { method: "HEAD", cache: "no-store", credentials: "include" });
+        const got = Date.now(), d = Date.parse(r.headers.get("date"));
+        lo = Math.max(lo, d - got);
+        hi = Math.min(hi, d + 1000 - sent);
+      } catch { /* skip sample */ }
+      await sleep(230);
+    }
+    if (lo <= hi) {
+      offset = Math.round((lo + hi) / 2);
+      sessionStorage.setItem("spa-offset", offset);
+    }
   }
 
   function render() {
@@ -179,7 +220,8 @@
   setInterval(() => {
     render();
     const dt = portalNow() - releaseAt();
-    if (cfg.armed && !firing && dt >= 0 && dt < WINDOW_MS) { firing = true; attempt().finally(() => (firing = false)); }
+    const lead = Number(cfg.lead) || 0; // start early to cover network delay; too early just shows no seats
+    if (cfg.armed && !firing && dt >= -lead && dt < WINDOW_MS) { firing = true; attempt().finally(() => (firing = false)); }
   }, 200);
   setInterval(() => cfg.armed && syncClock(), 4 * 60000); // also keeps the logged-in session alive
 
@@ -187,17 +229,18 @@
   const host = document.createElement("div");
   const root = host.attachShadow({ mode: "open" });
   root.innerHTML = `<style>
-      details { position:fixed; bottom:8px; right:8px; z-index:2147483647; background:#fff; color:#111;
+      .panel { position:fixed; bottom:8px; right:8px; z-index:2147483647; background:#fff; color:#111;
         font:13px/1.4 system-ui,sans-serif; border:1px solid #14532d; border-radius:8px; padding:6px 10px;
         width:260px; box-shadow:0 2px 8px #0003 }
       summary { cursor:pointer; font-weight:600; color:#14532d }
       label { display:block; margin-top:6px } input:not([type=checkbox]), select { width:100%; box-sizing:border-box }
       small { color:#666 } button { margin:6px 4px 0 0 } [data-msg] { margin-top:6px; color:#166534 }
     </style>
-    <details><summary>Safari Assist</summary>
+    <details class="panel"><summary>Safari Assist</summary>
       <label>Safari date <input data-k="date" type="date"></label>
       <label>Release time (portal clock) <input data-k="at" type="time" step="1" value="11:00:00"></label>
       <small>MP Tatkal 11:00:00 · Single seat 14:00:00 · Re-ticket 07:10 / 15:40</small>
+      <label>Start early by (ms) <input data-k="lead" type="number" min="0" max="3000" step="100" value="500"></label>
       <label>Gate priority <input data-k="gates" placeholder="Mukki, Kisli, Kanha"></label>
       <label>Shift <select data-k="shift"><option value="">Any</option><option>Morning</option>
         <option>Afternoon</option><option>Evening</option></select></label>
@@ -205,6 +248,7 @@
       <button data-a="save">Save form on this page</button><button data-a="fill">Fill now</button>
       <button data-a="clear">Forget saved forms</button>
       <div data-msg></div>
+      <details><summary>Last run timings</summary><pre data-log style="white-space:pre-wrap;margin:4px 0;font-size:11px"></pre></details>
     </details>`;
   const inputs = [...root.querySelectorAll("[data-k]")];
   const say = (t) => (root.querySelector("[data-msg]").textContent = t);
@@ -229,12 +273,21 @@
   });
   document.body.append(host);
 
-  chrome.storage.onChanged.addListener((ch) => { if (ch.cfg) { cfg = ch.cfg.newValue || {}; show(); } });
+  const showLog = (log) => (root.querySelector("[data-log]").textContent =
+    log?.steps ? `Release ${log.release}\n${log.steps.join("\n")}` : "No run yet");
+  chrome.storage.local.get("runLog").then(({ runLog }) => showLog(runLog));
+  chrome.storage.onChanged.addListener((ch) => {
+    if (ch.cfg) { cfg = ch.cfg.newValue || {}; show(); }
+    if (ch.runLog) showLog(ch.runLog.newValue);
+  });
 
   chrome.storage.local.get("cfg").then(async ({ cfg: c = {} }) => {
     cfg = c;
     show();
-    await syncClock();
-    if (cfg.armed) setTimeout(() => fill().then(banner), 300); // booking form pages: replay visitors right away
+    if (!sessionStorage.getItem("spa-offset")) await syncClock(); // once per tab; re-syncing per page adds jitter
+    if (cfg.armed && sessionStorage.getItem(`spa-${cfg.armId}`)) { // pages reached during this run
+      await mark(`ready ${location.pathname}`);
+    }
+    if (cfg.armed) setTimeout(async () => { const r = await fill(); banner(r); if (/Filled/.test(r)) mark(r); }, 300);
   });
 })();
