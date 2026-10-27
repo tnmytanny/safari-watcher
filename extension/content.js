@@ -2,7 +2,7 @@
 // Never reads or fills passwords, captcha or OTP, and never clicks payment: a person finishes those.
 (() => {
   const MP = location.host === "forest.mponline.gov.in";
-  const SKIP = /pass|captcha|otp|cvv|card|txtusername|email_newsletter/i;
+  const SKIP = /pass|captcha|otp|cvv|card|bank|ifsc|account|txtusername|email_newsletter/i; // never saved or filled
   const TICK = /declar|agree|term|accept|undertak/i;
   const formKey = "form:" + location.host + location.pathname.toLowerCase();
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -43,6 +43,8 @@
         const v = data[keys[i]];
         if (el.type === "checkbox" || el.type === "radio") {
           if (v && !el.checked) { el.click(); n++; }
+        } else if (el.tagName === "SELECT" && ![...el.options].some((o) => o.value === v)) {
+          return; // e.g. saved entry gate from another zone: leave the portal's choice
         } else if (el.value !== v) {
           el.value = v;
           el.dispatchEvent(new Event("input", { bubbles: true }));
@@ -50,6 +52,12 @@
           n++;
         }
       });
+    }
+    for (const sel of fields().filter((el) => el.tagName === "SELECT" && el.selectedIndex === 0 && el.options.length === 2 &&
+      /select/i.test(el.options[0].text))) {
+      sel.selectedIndex = 1; // only one real choice (MP entry gate): take it
+      sel.dispatchEvent(new Event("change", { bubbles: true }));
+      n++;
     }
     for (const cb of document.querySelectorAll("input[type=checkbox]"))
       if (!cb.checked && TICK.test(`${cb.id} ${cb.name} ${cb.closest("label, td, div")?.textContent || ""}`)) { cb.click(); n++; }
@@ -95,7 +103,7 @@
       .sort((a, b) => rank(a) - rank(b))[0];
   }
 
-  function refresh() {
+  async function refresh() {
     if (MP) {
       const btn = document.querySelector('input[name$="btnshow"]');
       const date = document.querySelector('input[name$="txtdate"]');
@@ -109,8 +117,12 @@
       return !!btn;
     }
     const btn = document.getElementById("btnSubmit"); // MH: AJAX grid refresh, same page
-    btn?.click();
-    return !!btn;
+    if (!btn) return false;
+    const old = document.querySelector("#bookingHtml table");
+    btn.click();
+    // a response takes ~2 s; clicking again before it lands restarts it, so wait for the new grid
+    for (let t = 0; t < 10000 && document.querySelector("#bookingHtml table") === old; t += 100) await sleep(100);
+    return true;
   }
 
   // ---------- release-time loop ----------
@@ -124,16 +136,17 @@
   async function attempt() {
     const tag = `spa-${cfg.armId}`;
     if (sessionStorage.getItem(tag) === "done") return;
+    sessionStorage.removeItem("spa-picked"); // note from an earlier arm
     while (cfg.armed && portalNow() - releaseAt() < WINDOW_MS) {
       const c = best();
       if (c) {
         sessionStorage.setItem(tag, "done");
-        banner(`Opening ${c.gate} ${c.shift} ${c.date}`);
+        sessionStorage.setItem("spa-picked", `Opened ${c.gate} ${c.shift} ${c.date}`); // shown on the next page too
         c.el.click();
         return;
       }
-      if (!refresh()) return banner("No search button on this page — open the availability page");
-      await sleep(RETRY_MS);
+      if (!(await refresh())) return banner("No search button on this page — open the availability page");
+      if (MP) await sleep(RETRY_MS);
     }
   }
 
@@ -146,7 +159,8 @@
 
   async function syncClock() {
     try { // Date header has 1 s resolution; +500 ms centres the error
-      const r = await fetch(location.href, { method: "HEAD", cache: "no-store", credentials: "include" });
+      // site root, never the current page: re-requesting MP booking pages trips "Illegal Operation" and logs out
+      const r = await fetch(location.origin + "/", { method: "HEAD", cache: "no-store", credentials: "include" });
       offset = Date.parse(r.headers.get("date")) + 500 - Date.now();
     } catch { /* keep last offset */ }
   }
@@ -156,7 +170,8 @@
     if (!box.isConnected) document.body.append(box);
     const left = Math.round((releaseAt() - portalNow()) / 1000);
     const clock = new Date(portalNow()).toTimeString().slice(0, 8);
-    box.textContent = `Portal ${clock} · ${left > 0 ? `T-${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}` : "LIVE"}` +
+    const picked = sessionStorage.getItem("spa-picked");
+    box.textContent = `${picked ? picked + " · " : ""}Portal ${clock} · ${left > 0 ? `T-${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}` : "LIVE"}` +
       ` · ${cfg.date || "any date"} ${cfg.gates || "any gate"}${note ? " · " + note : ""}`;
   }
 
@@ -168,14 +183,57 @@
   }, 200);
   setInterval(() => cfg.armed && syncClock(), 4 * 60000); // also keeps the logged-in session alive
 
-  chrome.storage.onChanged.addListener((ch) => { if (ch.cfg) cfg = ch.cfg.newValue || {}; });
-  chrome.runtime.onMessage.addListener((m, _, reply) => {
-    (m.type === "save" ? save() : fill()).then(reply);
-    return true;
+  // ---------- settings panel (in page, collapsed; shadow DOM keeps portal CSS out) ----------
+  const host = document.createElement("div");
+  const root = host.attachShadow({ mode: "open" });
+  root.innerHTML = `<style>
+      details { position:fixed; bottom:8px; right:8px; z-index:2147483647; background:#fff; color:#111;
+        font:13px/1.4 system-ui,sans-serif; border:1px solid #14532d; border-radius:8px; padding:6px 10px;
+        width:260px; box-shadow:0 2px 8px #0003 }
+      summary { cursor:pointer; font-weight:600; color:#14532d }
+      label { display:block; margin-top:6px } input:not([type=checkbox]), select { width:100%; box-sizing:border-box }
+      small { color:#666 } button { margin:6px 4px 0 0 } [data-msg] { margin-top:6px; color:#166534 }
+    </style>
+    <details><summary>Safari Assist</summary>
+      <label>Safari date <input data-k="date" type="date"></label>
+      <label>Release time (portal clock) <input data-k="at" type="time" step="1" value="11:00:00"></label>
+      <small>MP Tatkal 11:00:00 · Single seat 14:00:00 · Re-ticket 07:10 / 15:40</small>
+      <label>Gate priority <input data-k="gates" placeholder="Mukki, Kisli, Kanha"></label>
+      <label>Shift <select data-k="shift"><option value="">Any</option><option>Morning</option>
+        <option>Afternoon</option><option>Evening</option></select></label>
+      <label><input data-k="armed" type="checkbox"> Armed</label>
+      <button data-a="save">Save form on this page</button><button data-a="fill">Fill now</button>
+      <button data-a="clear">Forget saved forms</button>
+      <div data-msg></div>
+    </details>`;
+  const inputs = [...root.querySelectorAll("[data-k]")];
+  const say = (t) => (root.querySelector("[data-msg]").textContent = t);
+  const show = () => inputs.forEach((el) => {
+    const v = cfg[el.dataset.k];
+    if (v !== undefined) el[el.type === "checkbox" ? "checked" : "value"] = v;
   });
+  inputs.forEach((el) => el.addEventListener("change", () => {
+    const next = Object.fromEntries(inputs.map((i) => [i.dataset.k, i.type === "checkbox" ? i.checked : i.value]));
+    // a new arm starts a fresh attempt in every tab
+    chrome.storage.local.set({ cfg: { ...next, armId: next.armed ? Date.now() : 0 } }).then(() => say("Saved"));
+  }));
+  root.addEventListener("click", async (e) => {
+    const a = e.target.dataset?.a;
+    if (a === "save") say(await save());
+    if (a === "fill") say(await fill());
+    if (a === "clear") {
+      const all = await chrome.storage.local.get(null);
+      await chrome.storage.local.remove(Object.keys(all).filter((k) => k.startsWith("form:")));
+      say("Saved forms cleared");
+    }
+  });
+  document.body.append(host);
+
+  chrome.storage.onChanged.addListener((ch) => { if (ch.cfg) { cfg = ch.cfg.newValue || {}; show(); } });
 
   chrome.storage.local.get("cfg").then(async ({ cfg: c = {} }) => {
     cfg = c;
+    show();
     await syncClock();
     if (cfg.armed) setTimeout(() => fill().then(banner), 300); // booking form pages: replay visitors right away
   });
