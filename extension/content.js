@@ -13,6 +13,8 @@
 
   offset = Number(sessionStorage.getItem("spa-offset")) || 0; // last sync, so page-load marks use the portal clock
   const portalNow = () => Date.now() + offset;
+  // armed only in the tab where Armed was ticked (sessionStorage is per tab), so other portal tabs stay idle
+  const mine = () => cfg.armed && sessionStorage.getItem("spa-arm") === String(cfg.armId);
 
   // ---------- timing log: each step relative to the release time, kept for the last run ----------
   let logChain = Promise.resolve(); // serialise read-modify-write of runLog
@@ -30,24 +32,35 @@
   const fields = () => [...document.querySelectorAll("input, select, textarea")].filter((el) =>
     !["hidden", "submit", "button", "image", "password", "file"].includes(el.type) &&
     !SKIP.test(`${el.name} ${el.id} ${el.placeholder || ""}`));
-  const keysOf = (els) => { // name/id plus occurrence index, so repeated visitor rows stay distinct
+  const keysOf = (els) => { // field name without row/seat number + occurrence index: txtVisitorsName22 -> txtVisitorsName#1
     const seen = {};
-    return els.map((el) => { const k = el.name || el.id; seen[k] = (seen[k] || 0) + 1; return `${k}#${seen[k]}`; });
+    return els.map((el) => {
+      const k = (el.name || el.id).replace(/_?\d+$/, "");
+      seen[k] = (seen[k] || 0) + 1;
+      return `${k}#${seen[k]}`;
+    });
   };
 
   async function save() {
     const els = fields(), keys = keysOf(els), data = {};
     els.forEach((el, i) => {
-      if (el.type === "checkbox" || el.type === "radio") data[keys[i]] = el.checked;
-      else if (el.value) data[keys[i]] = el.value;
+      if (el.type === "checkbox" || el.type === "radio") { if (el.checked) data[keys[i]] = true; }
+      else if (el.tagName === "SELECT" ? el.selectedIndex > 0 : el.value) data[keys[i]] = el.value; // skip blanks/placeholders
     });
-    await chrome.storage.local.set({ [formKey]: data });
+    const old = (await chrome.storage.local.get(formKey))[formKey] || {};
+    await chrome.storage.local.set({ [formKey]: { ...old, ...data } }); // merge: full-vehicle and single-seat rows share this page
     return `Saved ${Object.keys(data).length} fields for ${location.pathname}`;
   }
 
-  async function fill() {
+  async function fill(focus = true) {
+    document.querySelector(".closePopUp")?.click(); // MP single-seat "Attention" popup
     const data = (await chrome.storage.local.get(formKey))[formKey];
     let n = 0;
+    const gates = (cfg.gates || "").split(",").map((g) => g.trim().toLowerCase()).filter(Boolean);
+    for (const sel of document.querySelectorAll("select[id*=EntryGate]")) { // pick by gate priority when there's a choice
+      const o = gates.map((g) => [...sel.options].find((x) => x.index && x.text.toLowerCase().includes(g))).find(Boolean);
+      if (o && sel.value !== o.value) { sel.value = o.value; sel.dispatchEvent(new Event("change", { bubbles: true })); n++; }
+    }
     if (data) {
       const els = fields(), keys = keysOf(els);
       els.forEach((el, i) => {
@@ -55,8 +68,8 @@
         const v = data[keys[i]];
         if (el.type === "checkbox" || el.type === "radio") {
           if (v && !el.checked) { el.click(); n++; }
-        } else if (el.tagName === "SELECT" && ![...el.options].some((o) => o.value === v)) {
-          return; // e.g. saved entry gate from another zone: leave the portal's choice
+        } else if (el.tagName === "SELECT" ? el.selectedIndex > 0 || ![...el.options].some((o) => o.value === v) : el.value) {
+          return; // only fill blanks: never overwrite what the person (or the portal) already chose
         } else if (el.value !== v) {
           el.value = v;
           el.dispatchEvent(new Event("input", { bubbles: true }));
@@ -74,7 +87,7 @@
     for (const cb of document.querySelectorAll("input[type=checkbox]"))
       if (!cb.checked && TICK.test(`${cb.id} ${cb.name} ${cb.closest("label, td, div")?.textContent || ""}`)) { cb.click(); n++; }
     const manual = [...document.querySelectorAll("input")].find((el) => /captcha|otp/i.test(el.name + el.id) && el.offsetParent);
-    if (manual) { manual.scrollIntoView({ block: "center" }); manual.focus(); }
+    if (manual && focus) { manual.scrollIntoView({ block: "center" }); manual.focus(); }
     return `${data ? "Filled" : "No saved form here; ticked"} ${n} field(s)${manual ? " — enter captcha/OTP" : ""}`;
   }
 
@@ -91,6 +104,11 @@
     btn.click();
   }, true);
 
+  // single-seat forms show visitor rows only after seats are picked: refill after each click on the page
+  document.addEventListener("click", (e) => {
+    if (mine() && e.target !== host && /LoginUserProfilePage/i.test(location.pathname)) setTimeout(() => fill(false).then(banner), 400); // no scroll: don't yank the page while picking seats
+  });
+
   // ---------- availability: find the best open gate ----------
   function candidates() {
     const out = [];
@@ -98,7 +116,7 @@
       for (const a of document.querySelectorAll('a[href*="LoginUserProfilePage.aspx"]')) {
         if (!(parseInt(a.textContent, 10) > 0)) continue;
         const q = new URLSearchParams(a.getAttribute("href").split("?")[1]);
-        out.push({ el: a, gate: q.get("Zone") || "", shift: q.get("TimeSlot") || "", date: q.get("Date") || "" });
+        out.push({ el: a, gate: q.get("Zone") || "", shift: q.get("TimeSlot") || "", date: q.get("Date") || "", permit: q.get("PermitType") || "" });
       }
     } else {
       for (const a of document.querySelectorAll("a.badge-success")) {
@@ -124,7 +142,8 @@
     const gates = (cfg.gates || "").split(",").map((g) => g.trim().toLowerCase()).filter(Boolean);
     const rank = (c) => gates.length ? gates.findIndex((g) => c.gate.toLowerCase().includes(g)) : 0;
     return candidates()
-      .filter((c) => (!want || c.date === want) && (!cfg.shift || c.shift === cfg.shift) && rank(c) >= 0)
+      .filter((c) => (!want || c.date === want) && (!cfg.shift || c.shift === cfg.shift) && rank(c) >= 0 &&
+        (!cfg.permit || c.permit === cfg.permit))
       .sort((a, b) => rank(a) - rank(b))[0];
   }
 
@@ -138,8 +157,10 @@
       }
       const seats = [...document.querySelectorAll('input[type=radio][name$="$Seat"]')]; // portal won't search without one
       if (seats.length && !seats.some((r) => r.checked)) seats.find((r) => r.value === "N")?.click();
-      btn?.click(); // ASP.NET postback reloads the page; the next load continues the attempt
-      return !!btn;
+      if (btn) btn.click(); // ASP.NET postback reloads the page; the next load continues the attempt
+      else if (/SingleSeatSearch/i.test(location.pathname)) location.reload(); // no search box; plain reload is safe here
+      else return false;
+      return true;
     }
     const btn = document.getElementById("btnSubmit"); // MH: AJAX grid refresh, same page
     if (!btn) return false;
@@ -164,7 +185,7 @@
     if (sessionStorage.getItem(tag) === "done") return;
     if (!sessionStorage.getItem(tag)) sessionStorage.removeItem("spa-picked"); // note from an earlier arm
     sessionStorage.setItem(tag, "running");
-    while (cfg.armed && portalNow() - releaseAt() < WINDOW_MS) {
+    while (mine() && portalNow() - releaseAt() < WINDOW_MS) {
       const c = best();
       if (c) {
         sessionStorage.setItem(tag, "done");
@@ -207,7 +228,7 @@
   }
 
   function render() {
-    if (!cfg.armed) return box.remove();
+    if (!mine()) return box.remove();
     if (!box.isConnected) document.body.append(box);
     const left = Math.round((releaseAt() - portalNow()) / 1000);
     const clock = new Date(portalNow()).toTimeString().slice(0, 8);
@@ -221,9 +242,9 @@
     render();
     const dt = portalNow() - releaseAt();
     const lead = Number(cfg.lead) || 0; // start early to cover network delay; too early just shows no seats
-    if (cfg.armed && !firing && dt >= -lead && dt < WINDOW_MS) { firing = true; attempt().finally(() => (firing = false)); }
+    if (mine() && !firing && dt >= -lead && dt < WINDOW_MS) { firing = true; attempt().finally(() => (firing = false)); }
   }, 200);
-  setInterval(() => cfg.armed && syncClock(), 4 * 60000); // also keeps the logged-in session alive
+  setInterval(() => mine() && syncClock(), 4 * 60000); // also keeps the logged-in session alive
 
   // ---------- settings panel (in page, collapsed; shadow DOM keeps portal CSS out) ----------
   const host = document.createElement("div");
@@ -244,6 +265,8 @@
       <label>Gate priority <input data-k="gates" placeholder="Mukki, Kisli, Kanha"></label>
       <label>Shift <select data-k="shift"><option value="">Any</option><option>Morning</option>
         <option>Afternoon</option><option>Evening</option></select></label>
+      <label>Single seat type <select data-k="permit"><option value="">Any</option>
+        <option value="SS2PM">Jeep single seat</option><option value="CB2PM">Canter</option></select></label>
       <label><input data-k="armed" type="checkbox"> Armed</label>
       <button data-a="save">Save form on this page</button><button data-a="fill">Fill now</button>
       <button data-a="clear">Forget saved forms</button>
@@ -258,8 +281,9 @@
   });
   inputs.forEach((el) => el.addEventListener("change", () => {
     const next = Object.fromEntries(inputs.map((i) => [i.dataset.k, i.type === "checkbox" ? i.checked : i.value]));
-    // a new arm starts a fresh attempt in every tab
-    chrome.storage.local.set({ cfg: { ...next, armId: next.armed ? Date.now() : 0 } }).then(() => say("Saved"));
+    const armId = next.armed ? Date.now() : 0; // a new arm starts a fresh attempt, in this tab only
+    if (armId) sessionStorage.setItem("spa-arm", armId);
+    chrome.storage.local.set({ cfg: { ...next, armId } }).then(() => say(armId ? "Armed in this tab" : "Saved"));
   }));
   root.addEventListener("click", async (e) => {
     const a = e.target.dataset?.a;
@@ -285,9 +309,9 @@
     cfg = c;
     show();
     if (!sessionStorage.getItem("spa-offset")) await syncClock(); // once per tab; re-syncing per page adds jitter
-    if (cfg.armed && sessionStorage.getItem(`spa-${cfg.armId}`)) { // pages reached during this run
+    if (mine() && sessionStorage.getItem(`spa-${cfg.armId}`)) { // pages reached during this run
       await mark(`ready ${location.pathname}`);
     }
-    if (cfg.armed) setTimeout(async () => { const r = await fill(); banner(r); if (/Filled/.test(r)) mark(r); }, 300);
+    if (mine()) setTimeout(async () => { const r = await fill(); banner(r); if (/Filled/.test(r)) mark(r); }, 300);
   });
 })();
