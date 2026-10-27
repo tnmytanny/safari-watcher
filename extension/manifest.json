@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Safari Permit Assist",
+  "version": "0.1.0",
+  "description": "Personal booking assist for MP Forest and Maharashtra safari portals: timed refresh, gate pick, form replay. Captcha, OTP and payment stay manual.",
+  "permissions": ["storage"],
+  "action": { "default_popup": "popup.html", "default_title": "Safari Permit Assist" },
+  "content_scripts": [{
+    "matches": ["https://forest.mponline.gov.in/*", "https://safaribooking.mahaforest.gov.in/*"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }]
+}

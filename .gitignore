@@ -2,3 +2,7 @@ __pycache__/
 .env
 mh-proxy/.vercel
 mh-proxy/.env*
+markdown_docs/feedback/
+SAN/
+markdown_docs/private/
+.DS_Store

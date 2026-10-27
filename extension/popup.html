@@ -1,0 +1,23 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  body { font: 13px system-ui, sans-serif; width: 300px; margin: 12px; }
+  label { display: block; margin: 8px 0 2px; color: #444; }
+  input, select { width: 100%; box-sizing: border-box; padding: 4px; }
+  .row { display: flex; gap: 6px; margin-top: 10px; }
+  button { flex: 1; padding: 6px; }
+  #armed { width: auto; }
+  #msg { margin-top: 8px; color: #166534; min-height: 1em; }
+  small { color: #777; }
+</style>
+<label>Safari date</label><input id="date" type="date">
+<label>Release time (portal clock)</label><input id="at" type="time" step="1" value="11:00:00">
+<small>MP Premium Tatkal 11:00:00 · MP Single Seat 14:00:00 · MP re-ticket 07:10 / 15:40</small>
+<label>Gate priority (comma separated, as on portal)</label><input id="gates" placeholder="Mukki, Kisli, Kanha">
+<label>Shift</label>
+<select id="shift"><option value="">Any</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>
+<label><input id="armed" type="checkbox"> Armed (refresh at release time, pick gate, replay form)</label>
+<div class="row"><button id="save">Save form on this page</button><button id="fill">Fill now</button></div>
+<div class="row"><button id="clear">Forget saved forms</button></div>
+<div id="msg"></div>
+<script src="popup.js"></script>

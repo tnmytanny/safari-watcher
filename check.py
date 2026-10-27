@@ -24,11 +24,32 @@ DAYS_AHEAD = int(os.environ.get("DAYS_AHEAD", "30"))
 STATE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "state.json")
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/130 Safari/537.36"
 
-MP_URL = "https://forest.mponline.gov.in/Search.aspx?park=4"
+MP_BASE = "https://forest.mponline.gov.in"
+MP_PARKS = [("Bandhavgarh", 1), ("Kanha", 2), ("Pench MP", 4)]
 MH_BASE = "https://safaribooking.mahaforest.gov.in"
 # (label, park id, vehicle id) — vehicle ids from Home/VehicleDropDown
-MH_PARKS = [("Tadoba Core", 1, 1), ("Tadoba Buffer", 2, 4)]
+MH_PARKS = [("Tadoba Core", 1, 1), ("Tadoba Buffer", 2, 4), ("Pench MH", 7, 1)]
 P = "ctl00$ContentPlaceHolder1$"
+# gates the client works with (substring of portal gate name); "<park> Single"/"<park> Tatkal" share the park's list
+GATES = {
+    "Bandhavgarh": ("Tala", "Khitauli", "Magadhi"),
+    "Kanha": ("Kanha", "Kisli", "Mukki"),
+    "Pench MP": ("Touria", "Karmajhiri", "Jhamtara"),
+    "Tadoba Core": ("Moharli", "Khutwanda"),
+    "Tadoba Buffer": ("Adegaon", "Agarzari", "Junona", "Dewada", "Mamla", "Nimdhela"),
+    "Pench MH": ("Sillari", "Khursapar"),
+}
+OBS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "observations.csv")
+
+
+def wanted(key):
+    park, _, gate, _ = key.split("|")
+    gates = GATES.get(park.removesuffix(" Single").removesuffix(" Tatkal"))
+    return gates is None or any(g.lower() in gate.lower() for g in gates)
+
+
+def book_link(park):
+    return f"{MH_BASE}/Userlogin/index/" if park in {p[0] for p in MH_PARKS} else MP_BASE
 
 
 def fetch(opener, url, data=None, headers=None, tries=2):
@@ -44,31 +65,37 @@ def fetch(opener, url, data=None, headers=None, tries=2):
             time.sleep(5)
 
 
-def parse_mp(page):
+def parse_mp(page, label="Pench MP"):
     """Available cells are booking links; link text is seats left."""
     out = {}
     for href, seats in re.findall(r'<a href="(LoginUserProfilePage\.aspx\?[^"]+)"[^>]*>\s*(\d+)\s*</a>', page):
         q = urllib.parse.parse_qs(html.unescape(href))
         d = dt.datetime.strptime(q["Date"][0], "%d %b %Y").date().isoformat()
-        out[f"Pench MP|{d}|{q['Zone'][0]}|{q['TimeSlot'][0]}"] = int(seats)
+        out[f"{label}|{d}|{q['Zone'][0]}|{q['TimeSlot'][0]}"] = int(seats)
     return out
 
 
-def mp_slots(dates):
+def mp_slots(label, park, dates, seat="N", page="Search.aspx"):
+    """page=searchNew.aspx is the Premium Tatkal grid; it rejects requests without a session + Referer."""
     opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(CookieJar()))
-    page = fetch(opener, MP_URL)
-    hidden = dict(re.findall(r'<input type="hidden" name="([^"]+)" id="[^"]*" value="([^"]*)"', page))
+    search = f"{MP_BASE}/Search.aspx?park={park}"
+    url = f"{MP_BASE}/{page}?park={park}"
+    first = fetch(opener, search)
+    if url != search:
+        first = fetch(opener, url, headers={"Referer": search})
+    hidden = dict(re.findall(r'<input type="hidden" name="([^"]+)" id="[^"]*" value="([^"]*)"', first))
     out = {}
     for d in dates:
         form = {**{k: html.unescape(v) for k, v in hidden.items()},
-                P + "Seat": "N", P + "txtdate": d.strftime("%a, %d %B %Y"),
+                P + "Seat": seat, P + "txtdate": d.strftime("%a, %d %B %Y"),
                 P + "btnshow.x": "10", P + "btnshow.y": "10"}
-        out.update(parse_mp(fetch(opener, MP_URL, form)))
+        out.update(parse_mp(fetch(opener, url, form, {"Referer": url}), label))
     return out
 
 
 def parse_mh(label, table):
-    """Header: date cells with colspan, then shift row; each gate row has one cell per (date, shift)."""
+    """Header: date cells with colspan, then shift row; each gate row has one cell per (date, shift).
+    Value: seats left (int) or "WL" (sold out, waitlist open) / "Booked" / "Closed"."""
     rows = re.split(r"<tr[^>]*>", table)
     dates = re.findall(r"colspan='(\d+)'[^>]*>\s*<strong>(\d\d/\d\d/\d{4})", table)
     shifts = re.findall(r"<strong>(Morning|Afternoon|Evening)</strong>", table)
@@ -85,8 +112,10 @@ def parse_mh(label, table):
             continue
         for (d, shift), cell in zip(cols, cells[1:]):
             s = re.search(r"badge-success'>\s*(\d+)\s*<", cell)
-            if s:
-                out[f"{label}|{d}|{m.group(1).strip()}|{shift}"] = int(s.group(1))
+            state = int(s.group(1)) if s else next(
+                (v for t, v in (("Waitlist", "WL"), ("Booked", "Booked"), ("Gate Closed", "Closed")) if t in cell), None)
+            if state is not None:
+                out[f"{label}|{d}|{m.group(1).strip()}|{shift}"] = state
     return out
 
 
@@ -155,7 +184,7 @@ def format_alert(new):
     for k in sorted(new, key=lambda k: (k.split("|")[1], k)):
         park, d, gate, shift = k.split("|")
         lines.append(f"- {park} | {d} | {gate} | {shift} | {new[k]} seats")
-    lines += ["", f"MP: {MP_URL}", f"MH: {MH_BASE}/Userlogin/index/"]
+    lines += ["", f"MP: {MP_BASE}", f"MH: {MH_BASE}/Userlogin/index/"]
     return "\n".join(lines)
 
 
@@ -171,7 +200,7 @@ def format_html(slots, heading, note=""):
     for park in sorted(parks):
         rows = parks[park]
         shifts = [s for s in ("Morning", "Afternoon", "Evening") if any(s in r for r in rows.values())]
-        link = MP_URL if park.startswith("Pench MP") else f"{MH_BASE}/Userlogin/index/"
+        link = book_link(park)
         head = "".join(f'<th style="{td}text-align:center;color:#6b7280;font-weight:600;font-size:12px;'
                        f'text-transform:uppercase;letter-spacing:.04em">{s}</th>' for s in shifts)
         body, last = [], None
@@ -213,7 +242,7 @@ def format_html(slots, heading, note=""):
   {f'<div style="color:#4b5563;font-size:14px;margin-top:6px">{e(note)}</div>' if note else ""}
  </td></tr>
  <tr><td>{"".join(cards)}</td></tr>
- <tr><td style="color:#9ca3af;font-size:12px;padding:4px;text-align:center">Safari slot watcher &middot; checks every 5 minutes</td></tr>
+ <tr><td style="color:#9ca3af;font-size:12px;padding:4px;text-align:center">Safari slot watcher &middot; checks every 2 minutes</td></tr>
 </table></td></tr></table></body></html>'''
 
 
@@ -247,7 +276,7 @@ def telegram_alert(new, first):
         rows.setdefault(park, {}).setdefault(d, {}).setdefault(gate, []).append(f"{shift} {seats}")
     lines = [f"<b>{e(title)}</b>"]
     for park in sorted(rows):
-        link = MP_URL if park.startswith("Pench MP") else f"{MH_BASE}/Userlogin/index/"
+        link = book_link(park)
         lines += ["", f'<b>{e(park)}</b>  <a href="{link}">Book</a>']
         for d in sorted(rows[park]):
             day = dt.date.fromisoformat(d).strftime("%a %d %b")
@@ -259,18 +288,40 @@ def telegram_alert(new, first):
     return send_telegram("\n".join(lines))
 
 
+def log_changes(old, new):
+    """Append MH cell state changes (seats/WL/Booked) to observations.csv, to learn how cancellations flow."""
+    rows = [(k, old[k], v) for k, v in new.items() if k in old and old[k] != v and k.split("|")[0] in {p[0] for p in MH_PARKS}]
+    if not rows:
+        return
+    first = not os.path.exists(OBS_FILE)
+    now = dt.datetime.now(dt.timezone(dt.timedelta(hours=5, minutes=30))).strftime("%Y-%m-%d %H:%M")
+    with open(OBS_FILE, "a") as f:
+        if first:
+            f.write("seen_ist,park,date,gate,shift,old,new\n")
+        for k, o, v in rows:
+            park, d, gate, shift = k.split("|")
+            f.write(f'{now},{park},{d},"{gate}",{shift},{o},{v}\n')
+
+
 def main(dry_run=False):
     today = dt.date.today()
     dates = [today + dt.timedelta(days=i) for i in range(1, DAYS_AHEAD + 1, 5)]
     # per channel: slots that channel has successfully delivered, {"email": {key: seats}, "whatsapp": {...}}
     state = json.load(open(STATE_FILE)) if os.path.exists(STATE_FILE) else {}
-    jobs = [("Pench MP", lambda: mp_slots(dates))] + [
-        (label, lambda p=p, v=v, l=label: mh_slots(l, p, v, dates)) for label, p, v in MH_PARKS]
+    days = lambda *n: [today + dt.timedelta(days=i) for i in n]
+    # today included: same-day re-ticket (no-show) permits show up in the regular MP grid
+    jobs = [j for label, p in MP_PARKS for j in (
+        (label, lambda l=label, p=p: mp_slots(l, p, [today] + dates)),
+        (f"{label} Single", lambda l=label, p=p: mp_slots(f"{l} Single", p, days(1), seat="S")),  # opens D-1 2 PM
+        (f"{label} Tatkal", lambda l=label, p=p: mp_slots(f"{l} Tatkal", p, days(2, 5, 7), page="searchNew.aspx")),  # D-7 11 AM
+    )] + [(label, lambda p=p, v=v, l=label: mh_slots(l, p, v, dates)) for label, p, v in MH_PARKS]
     cutoff = (today + dt.timedelta(days=DAYS_AHEAD)).isoformat()
-    scraped, failed = {}, set()
+    scraped, cells, failed = {}, {}, set()
     for label, job in jobs:
         try:
-            got = {k: v for k, v in job().items() if today.isoformat() < k.split("|")[1] <= cutoff}
+            got = {k: v for k, v in job().items() if today.isoformat() <= k.split("|")[1] <= cutoff and wanted(k)}
+            cells.update(got)
+            got = {k: v for k, v in got.items() if isinstance(v, int)}
             print(f"{label}: {len(got)} available slots")
             scraped.update(got)
         except Exception as e:
@@ -279,6 +330,9 @@ def main(dry_run=False):
     if dry_run:
         print(format_alert(scraped))
         return
+    old_cells = state.get("cells", {})
+    log_changes(old_cells, cells)
+    state["cells"] = {**{k: v for k, v in old_cells.items() if k.split("|")[0] in failed}, **cells}
     sent_ok = True
     for channel, send in (("email", email_alert), ("telegram", telegram_alert), ("whatsapp", whatsapp_alert)):
         old = state.get(channel, {})
