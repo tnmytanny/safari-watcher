@@ -472,7 +472,8 @@
   "Tadoba Buffer|2026-11-26|Somnath (Buffer)|Afternoon": 5,
   "Tadoba Buffer|2026-11-26|Somnath (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Afternoon": 6,
-  "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Morning": 6
+  "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Morning": 6,
+  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1
  },
  "telegram": {
   "Pench MP|2026-10-29|Jhamtara|Evening": 3,
@@ -947,6 +948,7 @@
   "Tadoba Buffer|2026-11-26|Somnath (Buffer)|Afternoon": 5,
   "Tadoba Buffer|2026-11-26|Somnath (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Afternoon": 6,
-  "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Morning": 6
+  "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Morning": 6,
+  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1
  }
 }
