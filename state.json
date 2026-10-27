@@ -26,7 +26,7 @@
   "Pench MP|2026-10-30|Teliya|Morning": 19,
   "Pench MP|2026-11-01|Karmajhiri|Evening": 1,
   "Pench MP|2026-11-01|Khawasa|Evening": 18,
-  "Pench MP|2026-11-01|Khawasa|Morning": 14,
+  "Pench MP|2026-11-01|Khawasa|Morning": 13,
   "Pench MP|2026-11-01|Khumbhpani|Evening": 5,
   "Pench MP|2026-11-01|Khumbhpani|Morning": 5,
   "Pench MP|2026-11-01|Masurnala|Evening": 5,
@@ -468,7 +468,8 @@
   "Tadoba Buffer|2026-11-26|Somnath (Buffer)|Afternoon": 5,
   "Tadoba Buffer|2026-11-26|Somnath (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Afternoon": 6,
-  "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Morning": 6
+  "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Morning": 6,
+  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1
  },
  "telegram": {
   "Pench MP|2026-10-29|Jhamtara|Evening": 3,
@@ -497,7 +498,7 @@
   "Pench MP|2026-10-30|Teliya|Morning": 19,
   "Pench MP|2026-11-01|Karmajhiri|Evening": 1,
   "Pench MP|2026-11-01|Khawasa|Evening": 18,
-  "Pench MP|2026-11-01|Khawasa|Morning": 14,
+  "Pench MP|2026-11-01|Khawasa|Morning": 13,
   "Pench MP|2026-11-01|Khumbhpani|Evening": 5,
   "Pench MP|2026-11-01|Khumbhpani|Morning": 5,
   "Pench MP|2026-11-01|Masurnala|Evening": 5,
@@ -939,6 +940,7 @@
   "Tadoba Buffer|2026-11-26|Somnath (Buffer)|Afternoon": 5,
   "Tadoba Buffer|2026-11-26|Somnath (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Afternoon": 6,
-  "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Morning": 6
+  "Tadoba Buffer|2026-11-26|Zari Peth (Buffer)|Morning": 6,
+  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1
  }
 }
