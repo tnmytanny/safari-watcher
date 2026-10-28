@@ -9,6 +9,7 @@ import sys
 import time
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from email.message import EmailMessage
 from http.cookiejar import CookieJar
 
@@ -317,9 +318,12 @@ def main(dry_run=False):
     )] + [(label, lambda p=p, v=v, l=label: mh_slots(l, p, v, dates)) for label, p, v in MH_PARKS]
     cutoff = (today + dt.timedelta(days=DAYS_AHEAD)).isoformat()
     scraped, cells, failed = {}, {}, set()
-    for label, job in jobs:
+    # each job has its own session; parallel because ~50 sequential requests to slow portals took ~2 min
+    with ThreadPoolExecutor(len(jobs)) as pool:
+        futures = [(label, pool.submit(job)) for label, job in jobs]
+    for label, fut in futures:
         try:
-            got = {k: v for k, v in job().items() if today.isoformat() <= k.split("|")[1] <= cutoff and wanted(k)}
+            got = {k: v for k, v in fut.result().items() if today.isoformat() <= k.split("|")[1] <= cutoff and wanted(k)}
             cells.update(got)
             got = {k: v for k, v in got.items() if isinstance(v, int)}
             print(f"{label}: {len(got)} available slots")
