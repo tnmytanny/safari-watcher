@@ -13,6 +13,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}  # latest tip, not the stale SHA from when the dispatch was queued
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
