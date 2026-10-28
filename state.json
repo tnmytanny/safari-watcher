@@ -110,7 +110,7 @@
   "Pench MH|2026-11-14|Khursapar (Core)|Morning": "WL",
   "Pench MH|2026-11-14|Sillari (Core)|Afternoon": "WL",
   "Pench MH|2026-11-14|Sillari (Core)|Morning": "WL",
-  "Pench MH|2026-11-15|Khursapar (Core)|Afternoon": 3,
+  "Pench MH|2026-11-15|Khursapar (Core)|Afternoon": 2,
   "Pench MH|2026-11-15|Khursapar (Core)|Morning": "WL",
   "Pench MH|2026-11-15|Sillari (Core)|Afternoon": 15,
   "Pench MH|2026-11-15|Sillari (Core)|Morning": "WL",
@@ -519,7 +519,6 @@
   "Tadoba Core|2026-11-01|Moharli Gate (Core)|Morning": "WL",
   "Tadoba Core|2026-11-02|Khutwanda Gate (Core)|Afternoon": "WL",
   "Tadoba Core|2026-11-02|Khutwanda Gate (Core)|Morning": "WL",
-  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1,
   "Tadoba Core|2026-11-02|Moharli Gate (Core)|Morning": "WL",
   "Tadoba Core|2026-11-03|Khutwanda Gate (Core)|Afternoon": "Closed",
   "Tadoba Core|2026-11-03|Khutwanda Gate (Core)|Morning": "Closed",
@@ -704,7 +703,7 @@
   "Pench MH|2026-11-08|Sillari (Core)|Morning": 22,
   "Pench MH|2026-11-09|Khursapar (Core)|Morning": 2,
   "Pench MH|2026-11-09|Sillari (Core)|Morning": 16,
-  "Pench MH|2026-11-15|Khursapar (Core)|Afternoon": 3,
+  "Pench MH|2026-11-15|Khursapar (Core)|Afternoon": 2,
   "Pench MH|2026-11-15|Sillari (Core)|Afternoon": 15,
   "Pench MH|2026-11-16|Khursapar (Core)|Afternoon": 7,
   "Pench MH|2026-11-16|Khursapar (Core)|Morning": 3,
@@ -815,8 +814,7 @@
   "Tadoba Buffer|2026-11-26|Mamla (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-11-26|Nimdhela (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-11-26|Nimdhela (Buffer)|Morning": 6,
-  "Tadoba Buffer|2026-11-27|Nimdhela (Buffer)|Morning": 5,
-  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1
+  "Tadoba Buffer|2026-11-27|Nimdhela (Buffer)|Morning": 5
  },
  "telegram": {
   "Bandhavgarh Single|2026-10-29|Magadhi|Evening": 4,
@@ -900,7 +898,7 @@
   "Pench MH|2026-11-08|Sillari (Core)|Morning": 22,
   "Pench MH|2026-11-09|Khursapar (Core)|Morning": 2,
   "Pench MH|2026-11-09|Sillari (Core)|Morning": 16,
-  "Pench MH|2026-11-15|Khursapar (Core)|Afternoon": 3,
+  "Pench MH|2026-11-15|Khursapar (Core)|Afternoon": 2,
   "Pench MH|2026-11-15|Sillari (Core)|Afternoon": 15,
   "Pench MH|2026-11-16|Khursapar (Core)|Afternoon": 7,
   "Pench MH|2026-11-16|Khursapar (Core)|Morning": 3,
@@ -1011,7 +1009,6 @@
   "Tadoba Buffer|2026-11-26|Mamla (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-11-26|Nimdhela (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-11-26|Nimdhela (Buffer)|Morning": 6,
-  "Tadoba Buffer|2026-11-27|Nimdhela (Buffer)|Morning": 5,
-  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1
+  "Tadoba Buffer|2026-11-27|Nimdhela (Buffer)|Morning": 5
  }
 }
