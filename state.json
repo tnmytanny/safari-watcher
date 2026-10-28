@@ -519,7 +519,7 @@
   "Tadoba Core|2026-11-01|Moharli Gate (Core)|Morning": "WL",
   "Tadoba Core|2026-11-02|Khutwanda Gate (Core)|Afternoon": "WL",
   "Tadoba Core|2026-11-02|Khutwanda Gate (Core)|Morning": "WL",
-  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": "WL",
+  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1,
   "Tadoba Core|2026-11-02|Moharli Gate (Core)|Morning": "WL",
   "Tadoba Core|2026-11-03|Khutwanda Gate (Core)|Afternoon": "Closed",
   "Tadoba Core|2026-11-03|Khutwanda Gate (Core)|Morning": "Closed",
@@ -815,7 +815,8 @@
   "Tadoba Buffer|2026-11-26|Mamla (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-11-26|Nimdhela (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-11-26|Nimdhela (Buffer)|Morning": 6,
-  "Tadoba Buffer|2026-11-27|Nimdhela (Buffer)|Morning": 5
+  "Tadoba Buffer|2026-11-27|Nimdhela (Buffer)|Morning": 5,
+  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1
  },
  "telegram": {
   "Bandhavgarh Single|2026-10-29|Magadhi|Evening": 4,
@@ -1010,6 +1011,7 @@
   "Tadoba Buffer|2026-11-26|Mamla (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-11-26|Nimdhela (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-11-26|Nimdhela (Buffer)|Morning": 6,
-  "Tadoba Buffer|2026-11-27|Nimdhela (Buffer)|Morning": 5
+  "Tadoba Buffer|2026-11-27|Nimdhela (Buffer)|Morning": 5,
+  "Tadoba Core|2026-11-02|Moharli Gate (Core)|Afternoon": 1
  }
 }
