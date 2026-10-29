@@ -1,6 +1,5 @@
 {
  "cells": {
-  "Bandhavgarh Single|2026-10-30|Khitauli|Evening": 1,
   "Bandhavgarh Single|2026-10-30|Magadhi|Evening": 1,
   "Bandhavgarh Single|2026-10-31|Magadhi|Evening": 1,
   "Bandhavgarh Tatkal|2026-10-31|Magadhi|Evening": 1,
@@ -234,7 +233,7 @@
   "Tadoba Buffer|2026-11-02|Dewada (Buffer)|Afternoon": "WL",
   "Tadoba Buffer|2026-11-02|Dewada (Buffer)|Morning": "WL",
   "Tadoba Buffer|2026-11-02|Junona(Buffer)|Afternoon": "Booked",
-  "Tadoba Buffer|2026-11-02|Junona(Buffer)|Morning": "Booked",
+  "Tadoba Buffer|2026-11-02|Junona(Buffer)|Morning": 1,
   "Tadoba Buffer|2026-11-02|Mamla (Buffer)|Afternoon": "Booked",
   "Tadoba Buffer|2026-11-02|Mamla (Buffer)|Morning": "Booked",
   "Tadoba Buffer|2026-11-02|Nimdhela (Buffer)|Afternoon": 5,
@@ -625,7 +624,6 @@
   "Tadoba Core|2026-11-28|Moharli Gate (Core)|Morning": "WL"
  },
  "email": {
-  "Bandhavgarh Single|2026-10-30|Khitauli|Evening": 1,
   "Bandhavgarh Single|2026-10-30|Magadhi|Evening": 1,
   "Bandhavgarh Single|2026-10-31|Magadhi|Evening": 1,
   "Bandhavgarh Tatkal|2026-10-31|Magadhi|Evening": 1,
@@ -777,6 +775,7 @@
   "Pench MP|2026-11-26|Touria|Evening": 1,
   "Tadoba Buffer|2026-10-30|Nimdhela (Buffer)|Morning": 4,
   "Tadoba Buffer|2026-11-01|Nimdhela (Buffer)|Afternoon": 3,
+  "Tadoba Buffer|2026-11-02|Junona(Buffer)|Morning": 1,
   "Tadoba Buffer|2026-11-02|Nimdhela (Buffer)|Afternoon": 5,
   "Tadoba Buffer|2026-11-02|Nimdhela (Buffer)|Morning": 6,
   "Tadoba Buffer|2026-11-03|Nimdhela (Buffer)|Afternoon": 4,
@@ -820,7 +819,6 @@
   "Tadoba Buffer|2026-11-28|Nimdhela (Buffer)|Morning": 4
  },
  "telegram": {
-  "Bandhavgarh Single|2026-10-30|Khitauli|Evening": 1,
   "Bandhavgarh Single|2026-10-30|Magadhi|Evening": 1,
   "Bandhavgarh Single|2026-10-31|Magadhi|Evening": 1,
   "Bandhavgarh Tatkal|2026-10-31|Magadhi|Evening": 1,
@@ -972,6 +970,7 @@
   "Pench MP|2026-11-26|Touria|Evening": 1,
   "Tadoba Buffer|2026-10-30|Nimdhela (Buffer)|Morning": 4,
   "Tadoba Buffer|2026-11-01|Nimdhela (Buffer)|Afternoon": 3,
+  "Tadoba Buffer|2026-11-02|Junona(Buffer)|Morning": 1,
   "Tadoba Buffer|2026-11-02|Nimdhela (Buffer)|Afternoon": 5,
   "Tadoba Buffer|2026-11-02|Nimdhela (Buffer)|Morning": 6,
   "Tadoba Buffer|2026-11-03|Nimdhela (Buffer)|Afternoon": 4,
