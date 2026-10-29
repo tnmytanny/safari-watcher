@@ -104,3 +104,5 @@ seen_ist,park,date,gate,shift,old,new
 2026-10-29 12:59,Tadoba Buffer,2026-11-26,"Agarzari (Buffer)",Morning,2,1
 2026-10-29 12:59,Pench MH,2026-10-31,"Khursapar (Core)",Afternoon,8,7
 2026-10-29 13:02,Tadoba Buffer,2026-11-02,"Junona(Buffer)",Morning,Booked,1
+2026-10-29 13:03,Tadoba Buffer,2026-11-02,"Junona(Buffer)",Morning,1,Booked
+2026-10-29 13:03,Pench MH,2026-10-31,"Khursapar (Core)",Afternoon,7,8
