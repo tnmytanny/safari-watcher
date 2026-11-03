@@ -1,6 +1,5 @@
 {
  "cells": {
-  "Bandhavgarh Single|2026-11-05|Khitauli|Evening": 2,
   "Bandhavgarh|2026-11-05|Magadhi|Evening": 4,
   "Bandhavgarh|2026-11-24|Magadhi|Evening": 2,
   "Bandhavgarh|2026-11-29|Khitauli|Evening": 2,
@@ -598,7 +597,6 @@
   "Tadoba Core|2026-12-03|Moharli Gate (Core)|Morning": "Booked"
  },
  "email": {
-  "Bandhavgarh Single|2026-11-05|Khitauli|Evening": 2,
   "Bandhavgarh|2026-11-05|Magadhi|Evening": 4,
   "Bandhavgarh|2026-11-24|Magadhi|Evening": 2,
   "Bandhavgarh|2026-11-29|Khitauli|Evening": 2,
@@ -769,7 +767,6 @@
   "Tadoba Buffer|2026-12-03|Nimdhela (Buffer)|Morning": 6
  },
  "telegram": {
-  "Bandhavgarh Single|2026-11-05|Khitauli|Evening": 2,
   "Bandhavgarh|2026-11-05|Magadhi|Evening": 4,
   "Bandhavgarh|2026-11-24|Magadhi|Evening": 2,
   "Bandhavgarh|2026-11-29|Khitauli|Evening": 2,
