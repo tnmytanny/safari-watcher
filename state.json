@@ -460,7 +460,7 @@
   "Tadoba Buffer|2026-12-06|Junona(Buffer)|Morning": "Booked",
   "Tadoba Buffer|2026-12-06|Mamla (Buffer)|Afternoon": "Booked",
   "Tadoba Buffer|2026-12-06|Mamla (Buffer)|Morning": "Booked",
-  "Tadoba Buffer|2026-12-06|Nimdhela (Buffer)|Afternoon": 6,
+  "Tadoba Buffer|2026-12-06|Nimdhela (Buffer)|Afternoon": 5,
   "Tadoba Buffer|2026-12-06|Nimdhela (Buffer)|Morning": 5,
   "Tadoba Core|2026-11-07|Khutwanda Gate (Core)|Afternoon": "WL",
   "Tadoba Core|2026-11-07|Khutwanda Gate (Core)|Morning": "WL",
@@ -721,7 +721,7 @@
   "Tadoba Buffer|2026-12-04|Nimdhela (Buffer)|Morning": 6,
   "Tadoba Buffer|2026-12-05|Nimdhela (Buffer)|Afternoon": 2,
   "Tadoba Buffer|2026-12-05|Nimdhela (Buffer)|Morning": 6,
-  "Tadoba Buffer|2026-12-06|Nimdhela (Buffer)|Afternoon": 6,
+  "Tadoba Buffer|2026-12-06|Nimdhela (Buffer)|Afternoon": 5,
   "Tadoba Buffer|2026-12-06|Nimdhela (Buffer)|Morning": 5
  },
  "telegram": {
@@ -862,7 +862,7 @@
   "Tadoba Buffer|2026-12-04|Nimdhela (Buffer)|Morning": 6,
   "Tadoba Buffer|2026-12-05|Nimdhela (Buffer)|Afternoon": 2,
   "Tadoba Buffer|2026-12-05|Nimdhela (Buffer)|Morning": 6,
-  "Tadoba Buffer|2026-12-06|Nimdhela (Buffer)|Afternoon": 6,
+  "Tadoba Buffer|2026-12-06|Nimdhela (Buffer)|Afternoon": 5,
   "Tadoba Buffer|2026-12-06|Nimdhela (Buffer)|Morning": 5
  }
 }
