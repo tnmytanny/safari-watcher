@@ -1,5 +1,9 @@
 {
  "cells": {
+  "Bandhavgarh Tatkal|2026-11-17|Khitauli|Evening": 3,
+  "Bandhavgarh Tatkal|2026-11-17|Magadhi|Evening": 1,
+  "Bandhavgarh Tatkal|2026-11-17|Magadhi|Morning": 1,
+  "Bandhavgarh Tatkal|2026-11-17|Tala|Evening": 2,
   "Bandhavgarh|2026-11-30|Khitauli|Evening": 2,
   "Bandhavgarh|2026-11-30|Magadhi|Evening": 3,
   "Bandhavgarh|2026-12-01|Magadhi|Evening": 11,
@@ -9,6 +13,7 @@
   "Bandhavgarh|2026-12-06|Magadhi|Evening": 11,
   "Bandhavgarh|2026-12-07|Magadhi|Evening": 7,
   "Bandhavgarh|2026-12-08|Magadhi|Morning": 4,
+  "Kanha Tatkal|2026-11-17|Kanha|Morning": 3,
   "Kanha|2026-11-30|Kanha|Evening": 10,
   "Kanha|2026-11-30|Kanha|Morning": 6,
   "Kanha|2026-11-30|Kisli|Evening": 3,
@@ -590,6 +595,10 @@
   "Tadoba Core|2026-12-10|Moharli Gate (Core)|Morning": "WL"
  },
  "email": {
+  "Bandhavgarh Tatkal|2026-11-17|Khitauli|Evening": 3,
+  "Bandhavgarh Tatkal|2026-11-17|Magadhi|Evening": 1,
+  "Bandhavgarh Tatkal|2026-11-17|Magadhi|Morning": 1,
+  "Bandhavgarh Tatkal|2026-11-17|Tala|Evening": 2,
   "Bandhavgarh|2026-11-30|Khitauli|Evening": 2,
   "Bandhavgarh|2026-11-30|Magadhi|Evening": 3,
   "Bandhavgarh|2026-12-01|Magadhi|Evening": 11,
@@ -599,6 +608,7 @@
   "Bandhavgarh|2026-12-06|Magadhi|Evening": 11,
   "Bandhavgarh|2026-12-07|Magadhi|Evening": 7,
   "Bandhavgarh|2026-12-08|Magadhi|Morning": 4,
+  "Kanha Tatkal|2026-11-17|Kanha|Morning": 3,
   "Kanha|2026-11-30|Kanha|Evening": 10,
   "Kanha|2026-11-30|Kanha|Morning": 6,
   "Kanha|2026-11-30|Kisli|Evening": 3,
@@ -757,6 +767,10 @@
   "Tadoba Buffer|2026-12-10|Nimdhela (Buffer)|Morning": 6
  },
  "telegram": {
+  "Bandhavgarh Tatkal|2026-11-17|Khitauli|Evening": 3,
+  "Bandhavgarh Tatkal|2026-11-17|Magadhi|Evening": 1,
+  "Bandhavgarh Tatkal|2026-11-17|Magadhi|Morning": 1,
+  "Bandhavgarh Tatkal|2026-11-17|Tala|Evening": 2,
   "Bandhavgarh|2026-11-30|Khitauli|Evening": 2,
   "Bandhavgarh|2026-11-30|Magadhi|Evening": 3,
   "Bandhavgarh|2026-12-01|Magadhi|Evening": 11,
@@ -766,6 +780,7 @@
   "Bandhavgarh|2026-12-06|Magadhi|Evening": 11,
   "Bandhavgarh|2026-12-07|Magadhi|Evening": 7,
   "Bandhavgarh|2026-12-08|Magadhi|Morning": 4,
+  "Kanha Tatkal|2026-11-17|Kanha|Morning": 3,
   "Kanha|2026-11-30|Kanha|Evening": 10,
   "Kanha|2026-11-30|Kanha|Morning": 6,
   "Kanha|2026-11-30|Kisli|Evening": 3,
