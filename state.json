@@ -1,6 +1,6 @@
 {
  "cells": {
-  "Bandhavgarh Tatkal|2026-11-18|Khitauli|Morning": 3,
+  "Bandhavgarh Tatkal|2026-11-18|Khitauli|Morning": 2,
   "Bandhavgarh Tatkal|2026-11-18|Magadhi|Morning": 4,
   "Bandhavgarh|2026-12-01|Magadhi|Evening": 11,
   "Bandhavgarh|2026-12-01|Magadhi|Morning": 2,
@@ -11,6 +11,7 @@
   "Bandhavgarh|2026-12-08|Magadhi|Morning": 4,
   "Bandhavgarh|2026-12-09|Khitauli|Morning": 1,
   "Bandhavgarh|2026-12-09|Magadhi|Morning": 2,
+  "Kanha Tatkal|2026-11-18|Kisli|Morning": 1,
   "Kanha|2026-12-01|Kanha|Evening": 8,
   "Kanha|2026-12-01|Kanha|Morning": 11,
   "Kanha|2026-12-01|Kisli|Evening": 3,
@@ -603,7 +604,7 @@
   "Tadoba Core|2026-12-11|Moharli Gate (Core)|Morning": "WL"
  },
  "email": {
-  "Bandhavgarh Tatkal|2026-11-18|Khitauli|Morning": 3,
+  "Bandhavgarh Tatkal|2026-11-18|Khitauli|Morning": 2,
   "Bandhavgarh Tatkal|2026-11-18|Magadhi|Morning": 4,
   "Bandhavgarh|2026-12-01|Magadhi|Evening": 11,
   "Bandhavgarh|2026-12-01|Magadhi|Morning": 2,
@@ -614,6 +615,7 @@
   "Bandhavgarh|2026-12-08|Magadhi|Morning": 4,
   "Bandhavgarh|2026-12-09|Khitauli|Morning": 1,
   "Bandhavgarh|2026-12-09|Magadhi|Morning": 2,
+  "Kanha Tatkal|2026-11-18|Kisli|Morning": 1,
   "Kanha|2026-12-01|Kanha|Evening": 8,
   "Kanha|2026-12-01|Kanha|Morning": 11,
   "Kanha|2026-12-01|Kisli|Evening": 3,
@@ -776,7 +778,7 @@
   "Tadoba Buffer|2026-12-11|Nimdhela (Buffer)|Morning": 5
  },
  "telegram": {
-  "Bandhavgarh Tatkal|2026-11-18|Khitauli|Morning": 3,
+  "Bandhavgarh Tatkal|2026-11-18|Khitauli|Morning": 2,
   "Bandhavgarh Tatkal|2026-11-18|Magadhi|Morning": 4,
   "Bandhavgarh|2026-12-01|Magadhi|Evening": 11,
   "Bandhavgarh|2026-12-01|Magadhi|Morning": 2,
@@ -787,6 +789,7 @@
   "Bandhavgarh|2026-12-08|Magadhi|Morning": 4,
   "Bandhavgarh|2026-12-09|Khitauli|Morning": 1,
   "Bandhavgarh|2026-12-09|Magadhi|Morning": 2,
+  "Kanha Tatkal|2026-11-18|Kisli|Morning": 1,
   "Kanha|2026-12-01|Kanha|Evening": 8,
   "Kanha|2026-12-01|Kanha|Morning": 11,
   "Kanha|2026-12-01|Kisli|Evening": 3,
