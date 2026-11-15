@@ -1,5 +1,7 @@
 {
  "cells": {
+  "Bandhavgarh Tatkal|2026-11-22|Khitauli|Evening": 2,
+  "Bandhavgarh Tatkal|2026-11-22|Tala|Evening": 2,
   "Bandhavgarh|2026-11-30|Magadhi|Evening": 2,
   "Bandhavgarh|2026-12-01|Magadhi|Evening": 6,
   "Bandhavgarh|2026-12-03|Magadhi|Evening": 12,
@@ -156,6 +158,11 @@
   "Pench MH|2026-12-15|Khursapar (Core)|Morning": "Closed",
   "Pench MH|2026-12-15|Sillari (Core)|Afternoon": 27,
   "Pench MH|2026-12-15|Sillari (Core)|Morning": 25,
+  "Pench MP Tatkal|2026-11-22|Jhamtara|Evening": 1,
+  "Pench MP Tatkal|2026-11-22|Jhamtara|Morning": 1,
+  "Pench MP Tatkal|2026-11-22|Karmajhiri|Evening": 2,
+  "Pench MP Tatkal|2026-11-22|Touria|Evening": 1,
+  "Pench MP Tatkal|2026-11-22|Touria|Morning": 1,
   "Pench MP|2026-11-23|Jhamtara|Evening": 1,
   "Pench MP|2026-11-26|Jhamtara|Evening": 1,
   "Pench MP|2026-12-03|Jhamtara|Evening": 3,
@@ -619,6 +626,8 @@
   "Tadoba Core|2026-12-15|Moharli Gate (Core)|Morning": "Closed"
  },
  "email": {
+  "Bandhavgarh Tatkal|2026-11-22|Khitauli|Evening": 2,
+  "Bandhavgarh Tatkal|2026-11-22|Tala|Evening": 2,
   "Bandhavgarh|2026-11-30|Magadhi|Evening": 2,
   "Bandhavgarh|2026-12-01|Magadhi|Evening": 6,
   "Bandhavgarh|2026-12-03|Magadhi|Evening": 12,
@@ -742,6 +751,11 @@
   "Pench MH|2026-12-14|Sillari (Core)|Morning": 27,
   "Pench MH|2026-12-15|Sillari (Core)|Afternoon": 27,
   "Pench MH|2026-12-15|Sillari (Core)|Morning": 25,
+  "Pench MP Tatkal|2026-11-22|Jhamtara|Evening": 1,
+  "Pench MP Tatkal|2026-11-22|Jhamtara|Morning": 1,
+  "Pench MP Tatkal|2026-11-22|Karmajhiri|Evening": 2,
+  "Pench MP Tatkal|2026-11-22|Touria|Evening": 1,
+  "Pench MP Tatkal|2026-11-22|Touria|Morning": 1,
   "Pench MP|2026-11-23|Jhamtara|Evening": 1,
   "Pench MP|2026-11-26|Jhamtara|Evening": 1,
   "Pench MP|2026-12-03|Jhamtara|Evening": 3,
@@ -823,6 +837,8 @@
   "Tadoba Buffer|2026-12-15|Nimdhela (Buffer)|Morning": 6
  },
  "telegram": {
+  "Bandhavgarh Tatkal|2026-11-22|Khitauli|Evening": 2,
+  "Bandhavgarh Tatkal|2026-11-22|Tala|Evening": 2,
   "Bandhavgarh|2026-11-30|Magadhi|Evening": 2,
   "Bandhavgarh|2026-12-01|Magadhi|Evening": 6,
   "Bandhavgarh|2026-12-03|Magadhi|Evening": 12,
@@ -946,6 +962,11 @@
   "Pench MH|2026-12-14|Sillari (Core)|Morning": 27,
   "Pench MH|2026-12-15|Sillari (Core)|Afternoon": 27,
   "Pench MH|2026-12-15|Sillari (Core)|Morning": 25,
+  "Pench MP Tatkal|2026-11-22|Jhamtara|Evening": 1,
+  "Pench MP Tatkal|2026-11-22|Jhamtara|Morning": 1,
+  "Pench MP Tatkal|2026-11-22|Karmajhiri|Evening": 2,
+  "Pench MP Tatkal|2026-11-22|Touria|Evening": 1,
+  "Pench MP Tatkal|2026-11-22|Touria|Morning": 1,
   "Pench MP|2026-11-23|Jhamtara|Evening": 1,
   "Pench MP|2026-11-26|Jhamtara|Evening": 1,
   "Pench MP|2026-12-03|Jhamtara|Evening": 3,
