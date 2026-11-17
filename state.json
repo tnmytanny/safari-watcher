@@ -1,6 +1,5 @@
 {
  "cells": {
-  "Bandhavgarh Tatkal|2026-11-24|Khitauli|Morning": 1,
   "Bandhavgarh Tatkal|2026-11-24|Magadhi|Morning": 6,
   "Bandhavgarh Tatkal|2026-11-24|Tala|Evening": 1,
   "Bandhavgarh|2026-11-30|Magadhi|Evening": 1,
@@ -18,7 +17,6 @@
   "Kanha Single|2026-11-18|Mukki|Morning": 1,
   "Kanha Single|2026-11-19|Mukki|Evening": 1,
   "Kanha Single|2026-11-20|Kanha|Evening": 1,
-  "Kanha Tatkal|2026-11-24|Kanha|Morning": 1,
   "Kanha|2026-11-30|Kanha|Evening": 10,
   "Kanha|2026-11-30|Kisli|Evening": 1,
   "Kanha|2026-12-02|Kanha|Morning": 6,
@@ -169,7 +167,7 @@
   "Pench MP Tatkal|2026-11-22|Jhamtara|Morning": 1,
   "Pench MP Tatkal|2026-11-22|Karmajhiri|Evening": 1,
   "Pench MP Tatkal|2026-11-24|Touria|Evening": 2,
-  "Pench MP Tatkal|2026-11-24|Touria|Morning": 2,
+  "Pench MP Tatkal|2026-11-24|Touria|Morning": 4,
   "Pench MP|2026-11-23|Jhamtara|Evening": 1,
   "Pench MP|2026-12-03|Jhamtara|Evening": 3,
   "Pench MP|2026-12-03|Karmajhiri|Evening": 1,
@@ -627,7 +625,6 @@
   "Tadoba Core|2026-12-17|Moharli Gate (Core)|Morning": "WL"
  },
  "email": {
-  "Bandhavgarh Tatkal|2026-11-24|Khitauli|Morning": 1,
   "Bandhavgarh Tatkal|2026-11-24|Magadhi|Morning": 6,
   "Bandhavgarh Tatkal|2026-11-24|Tala|Evening": 1,
   "Bandhavgarh|2026-11-30|Magadhi|Evening": 1,
@@ -645,7 +642,6 @@
   "Kanha Single|2026-11-18|Mukki|Morning": 1,
   "Kanha Single|2026-11-19|Mukki|Evening": 1,
   "Kanha Single|2026-11-20|Kanha|Evening": 1,
-  "Kanha Tatkal|2026-11-24|Kanha|Morning": 1,
   "Kanha|2026-11-30|Kanha|Evening": 10,
   "Kanha|2026-11-30|Kisli|Evening": 1,
   "Kanha|2026-12-02|Kanha|Morning": 6,
@@ -766,7 +762,7 @@
   "Pench MP Tatkal|2026-11-22|Jhamtara|Morning": 1,
   "Pench MP Tatkal|2026-11-22|Karmajhiri|Evening": 1,
   "Pench MP Tatkal|2026-11-24|Touria|Evening": 2,
-  "Pench MP Tatkal|2026-11-24|Touria|Morning": 2,
+  "Pench MP Tatkal|2026-11-24|Touria|Morning": 4,
   "Pench MP|2026-11-23|Jhamtara|Evening": 1,
   "Pench MP|2026-12-03|Jhamtara|Evening": 3,
   "Pench MP|2026-12-03|Karmajhiri|Evening": 1,
@@ -851,7 +847,6 @@
   "Tadoba Buffer|2026-12-17|Nimdhela (Buffer)|Morning": 5
  },
  "telegram": {
-  "Bandhavgarh Tatkal|2026-11-24|Khitauli|Morning": 1,
   "Bandhavgarh Tatkal|2026-11-24|Magadhi|Morning": 6,
   "Bandhavgarh Tatkal|2026-11-24|Tala|Evening": 1,
   "Bandhavgarh|2026-11-30|Magadhi|Evening": 1,
@@ -869,7 +864,6 @@
   "Kanha Single|2026-11-18|Mukki|Morning": 1,
   "Kanha Single|2026-11-19|Mukki|Evening": 1,
   "Kanha Single|2026-11-20|Kanha|Evening": 1,
-  "Kanha Tatkal|2026-11-24|Kanha|Morning": 1,
   "Kanha|2026-11-30|Kanha|Evening": 10,
   "Kanha|2026-11-30|Kisli|Evening": 1,
   "Kanha|2026-12-02|Kanha|Morning": 6,
@@ -990,7 +984,7 @@
   "Pench MP Tatkal|2026-11-22|Jhamtara|Morning": 1,
   "Pench MP Tatkal|2026-11-22|Karmajhiri|Evening": 1,
   "Pench MP Tatkal|2026-11-24|Touria|Evening": 2,
-  "Pench MP Tatkal|2026-11-24|Touria|Morning": 2,
+  "Pench MP Tatkal|2026-11-24|Touria|Morning": 4,
   "Pench MP|2026-11-23|Jhamtara|Evening": 1,
   "Pench MP|2026-12-03|Jhamtara|Evening": 3,
   "Pench MP|2026-12-03|Karmajhiri|Evening": 1,
