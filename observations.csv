@@ -1623,3 +1623,6 @@ seen_ist,park,date,gate,shift,old,new
 2026-11-20 12:43,Pench MH,2026-11-28,"Khursapar (Core)",Morning,9,8
 2026-11-20 12:44,Pench MH,2026-11-28,"Khursapar (Core)",Morning,8,9
 2026-11-20 12:48,Pench MH,2026-11-28,"Khursapar (Core)",Morning,9,8
+2026-11-20 12:51,Tadoba Core,2026-12-07,"Moharli Gate (Core)",Afternoon,Booked,1
+2026-11-20 12:51,Tadoba Buffer,2026-12-08,"Dewada (Buffer)",Afternoon,Booked,1
+2026-11-20 12:51,Pench MH,2026-11-28,"Khursapar (Core)",Morning,8,9
