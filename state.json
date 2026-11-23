@@ -2,7 +2,7 @@
  "cells": {
   "Bandhavgarh Single|2026-11-24|Khitauli|Evening": 1,
   "Bandhavgarh|2026-12-03|Magadhi|Evening": 5,
-  "Bandhavgarh|2026-12-06|Magadhi|Evening": 5,
+  "Bandhavgarh|2026-12-06|Magadhi|Evening": 4,
   "Bandhavgarh|2026-12-14|Magadhi|Evening": 12,
   "Bandhavgarh|2026-12-15|Khitauli|Morning": 8,
   "Bandhavgarh|2026-12-15|Magadhi|Evening": 10,
@@ -34,6 +34,7 @@
   "Pench MH|2026-11-24|Khursapar (Core)|Afternoon": "Closed",
   "Pench MH|2026-11-24|Khursapar (Core)|Morning": "Closed",
   "Pench MH|2026-11-24|Sillari (Core)|Afternoon": "WL",
+  "Pench MH|2026-11-24|Sillari (Core)|Morning": "WL",
   "Pench MH|2026-11-25|Khursapar (Core)|Afternoon": 3,
   "Pench MH|2026-11-25|Khursapar (Core)|Morning": 6,
   "Pench MH|2026-11-25|Sillari (Core)|Afternoon": "Closed",
@@ -610,7 +611,7 @@
  "email": {
   "Bandhavgarh Single|2026-11-24|Khitauli|Evening": 1,
   "Bandhavgarh|2026-12-03|Magadhi|Evening": 5,
-  "Bandhavgarh|2026-12-06|Magadhi|Evening": 5,
+  "Bandhavgarh|2026-12-06|Magadhi|Evening": 4,
   "Bandhavgarh|2026-12-14|Magadhi|Evening": 12,
   "Bandhavgarh|2026-12-15|Khitauli|Morning": 8,
   "Bandhavgarh|2026-12-15|Magadhi|Evening": 10,
@@ -806,7 +807,7 @@
  "telegram": {
   "Bandhavgarh Single|2026-11-24|Khitauli|Evening": 1,
   "Bandhavgarh|2026-12-03|Magadhi|Evening": 5,
-  "Bandhavgarh|2026-12-06|Magadhi|Evening": 5,
+  "Bandhavgarh|2026-12-06|Magadhi|Evening": 4,
   "Bandhavgarh|2026-12-14|Magadhi|Evening": 12,
   "Bandhavgarh|2026-12-15|Khitauli|Morning": 8,
   "Bandhavgarh|2026-12-15|Magadhi|Evening": 10,
