@@ -1,7 +1,6 @@
 {
  "cells": {
   "Bandhavgarh Single|2026-11-24|Khitauli|Evening": 1,
-  "Bandhavgarh Tatkal|2026-11-30|Magadhi|Morning": 1,
   "Bandhavgarh|2026-12-03|Magadhi|Evening": 6,
   "Bandhavgarh|2026-12-06|Magadhi|Evening": 5,
   "Bandhavgarh|2026-12-14|Magadhi|Evening": 12,
@@ -34,7 +33,7 @@
   "Kanha|2026-12-16|Kisli|Morning": 5,
   "Pench MH|2026-11-24|Khursapar (Core)|Afternoon": "Closed",
   "Pench MH|2026-11-24|Khursapar (Core)|Morning": "Closed",
-  "Pench MH|2026-11-24|Sillari (Core)|Afternoon": 5,
+  "Pench MH|2026-11-24|Sillari (Core)|Afternoon": 4,
   "Pench MH|2026-11-24|Sillari (Core)|Morning": 4,
   "Pench MH|2026-11-25|Khursapar (Core)|Afternoon": 3,
   "Pench MH|2026-11-25|Khursapar (Core)|Morning": 7,
@@ -612,7 +611,6 @@
  },
  "email": {
   "Bandhavgarh Single|2026-11-24|Khitauli|Evening": 1,
-  "Bandhavgarh Tatkal|2026-11-30|Magadhi|Morning": 1,
   "Bandhavgarh|2026-12-03|Magadhi|Evening": 6,
   "Bandhavgarh|2026-12-06|Magadhi|Evening": 5,
   "Bandhavgarh|2026-12-14|Magadhi|Evening": 12,
@@ -643,7 +641,7 @@
   "Kanha|2026-12-15|Kisli|Morning": 2,
   "Kanha|2026-12-16|Kanha|Morning": 5,
   "Kanha|2026-12-16|Kisli|Morning": 5,
-  "Pench MH|2026-11-24|Sillari (Core)|Afternoon": 5,
+  "Pench MH|2026-11-24|Sillari (Core)|Afternoon": 4,
   "Pench MH|2026-11-24|Sillari (Core)|Morning": 4,
   "Pench MH|2026-11-25|Khursapar (Core)|Afternoon": 3,
   "Pench MH|2026-11-25|Khursapar (Core)|Morning": 7,
@@ -812,7 +810,6 @@
  },
  "telegram": {
   "Bandhavgarh Single|2026-11-24|Khitauli|Evening": 1,
-  "Bandhavgarh Tatkal|2026-11-30|Magadhi|Morning": 1,
   "Bandhavgarh|2026-12-03|Magadhi|Evening": 6,
   "Bandhavgarh|2026-12-06|Magadhi|Evening": 5,
   "Bandhavgarh|2026-12-14|Magadhi|Evening": 12,
@@ -843,7 +840,7 @@
   "Kanha|2026-12-15|Kisli|Morning": 2,
   "Kanha|2026-12-16|Kanha|Morning": 5,
   "Kanha|2026-12-16|Kisli|Morning": 5,
-  "Pench MH|2026-11-24|Sillari (Core)|Afternoon": 5,
+  "Pench MH|2026-11-24|Sillari (Core)|Afternoon": 4,
   "Pench MH|2026-11-24|Sillari (Core)|Morning": 4,
   "Pench MH|2026-11-25|Khursapar (Core)|Afternoon": 3,
   "Pench MH|2026-11-25|Khursapar (Core)|Morning": 7,
