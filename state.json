@@ -2,6 +2,7 @@
  "cells": {
   "Bandhavgarh Single|2026-11-30|Magadhi|Evening": 1,
   "Bandhavgarh Single|2026-12-01|Magadhi|Evening": 1,
+  "Bandhavgarh Tatkal|2026-12-05|Khitauli|Morning": 1,
   "Bandhavgarh Tatkal|2026-12-05|Magadhi|Morning": 2,
   "Bandhavgarh|2026-12-14|Magadhi|Evening": 6,
   "Bandhavgarh|2026-12-15|Khitauli|Morning": 3,
@@ -14,7 +15,7 @@
   "Kanha Single|2026-12-01|Kisli|Morning": 2,
   "Kanha Tatkal|2026-12-03|Kisli|Evening": 1,
   "Kanha Tatkal|2026-12-03|Mukki|Morning": 3,
-  "Kanha Tatkal|2026-12-05|Kanha|Evening": 8,
+  "Kanha Tatkal|2026-12-05|Kanha|Evening": 9,
   "Kanha|2026-12-01|Kanha|Evening": 4,
   "Kanha|2026-12-03|Kanha|Evening": 4,
   "Kanha|2026-12-08|Kanha|Evening": 7,
@@ -424,7 +425,7 @@
   "Tadoba Buffer|2026-12-22|Mamla (Buffer)|Afternoon": "WL",
   "Tadoba Buffer|2026-12-22|Mamla (Buffer)|Morning": "WL",
   "Tadoba Buffer|2026-12-22|Nimdhela (Buffer)|Afternoon": "WL",
-  "Tadoba Buffer|2026-12-22|Nimdhela (Buffer)|Morning": "WL",
+  "Tadoba Buffer|2026-12-22|Nimdhela (Buffer)|Morning": 2,
   "Tadoba Buffer|2026-12-24|Adegaon (Buffer)|Afternoon": "WL",
   "Tadoba Buffer|2026-12-24|Adegaon (Buffer)|Morning": "WL",
   "Tadoba Buffer|2026-12-24|Agarzari (Buffer)|Afternoon": "Booked",
@@ -609,6 +610,7 @@
  "email": {
   "Bandhavgarh Single|2026-11-30|Magadhi|Evening": 1,
   "Bandhavgarh Single|2026-12-01|Magadhi|Evening": 1,
+  "Bandhavgarh Tatkal|2026-12-05|Khitauli|Morning": 1,
   "Bandhavgarh Tatkal|2026-12-05|Magadhi|Morning": 2,
   "Bandhavgarh|2026-12-14|Magadhi|Evening": 6,
   "Bandhavgarh|2026-12-15|Khitauli|Morning": 3,
@@ -621,7 +623,7 @@
   "Kanha Single|2026-12-01|Kisli|Morning": 2,
   "Kanha Tatkal|2026-12-03|Kisli|Evening": 1,
   "Kanha Tatkal|2026-12-03|Mukki|Morning": 3,
-  "Kanha Tatkal|2026-12-05|Kanha|Evening": 8,
+  "Kanha Tatkal|2026-12-05|Kanha|Evening": 9,
   "Kanha|2026-12-01|Kanha|Evening": 4,
   "Kanha|2026-12-03|Kanha|Evening": 4,
   "Kanha|2026-12-08|Kanha|Evening": 7,
@@ -752,11 +754,13 @@
   "Tadoba Buffer|2026-12-15|Nimdhela (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-12-17|Nimdhela (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-12-17|Nimdhela (Buffer)|Morning": 5,
-  "Tadoba Buffer|2026-12-18|Nimdhela (Buffer)|Morning": 3
+  "Tadoba Buffer|2026-12-18|Nimdhela (Buffer)|Morning": 3,
+  "Tadoba Buffer|2026-12-22|Nimdhela (Buffer)|Morning": 2
  },
  "telegram": {
   "Bandhavgarh Single|2026-11-30|Magadhi|Evening": 1,
   "Bandhavgarh Single|2026-12-01|Magadhi|Evening": 1,
+  "Bandhavgarh Tatkal|2026-12-05|Khitauli|Morning": 1,
   "Bandhavgarh Tatkal|2026-12-05|Magadhi|Morning": 2,
   "Bandhavgarh|2026-12-14|Magadhi|Evening": 6,
   "Bandhavgarh|2026-12-15|Khitauli|Morning": 3,
@@ -769,7 +773,7 @@
   "Kanha Single|2026-12-01|Kisli|Morning": 2,
   "Kanha Tatkal|2026-12-03|Kisli|Evening": 1,
   "Kanha Tatkal|2026-12-03|Mukki|Morning": 3,
-  "Kanha Tatkal|2026-12-05|Kanha|Evening": 8,
+  "Kanha Tatkal|2026-12-05|Kanha|Evening": 9,
   "Kanha|2026-12-01|Kanha|Evening": 4,
   "Kanha|2026-12-03|Kanha|Evening": 4,
   "Kanha|2026-12-08|Kanha|Evening": 7,
@@ -900,7 +904,8 @@
   "Tadoba Buffer|2026-12-15|Nimdhela (Buffer)|Morning": 5,
   "Tadoba Buffer|2026-12-17|Nimdhela (Buffer)|Afternoon": 6,
   "Tadoba Buffer|2026-12-17|Nimdhela (Buffer)|Morning": 5,
-  "Tadoba Buffer|2026-12-18|Nimdhela (Buffer)|Morning": 3
+  "Tadoba Buffer|2026-12-18|Nimdhela (Buffer)|Morning": 3,
+  "Tadoba Buffer|2026-12-22|Nimdhela (Buffer)|Morning": 2
  },
  "whatsapp": {}
 }
